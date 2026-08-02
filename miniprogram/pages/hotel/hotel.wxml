@@ -1,0 +1,79 @@
+<!--pages/hotel/hotel.wxml-->
+<view class="hotel-container">
+  <!-- 轮播图 -->
+  <view class="banner-section">
+    <swiper 
+      class="banner-swiper" 
+      indicator-dots="{{true}}" 
+      autoplay="{{true}}" 
+      interval="4000" 
+      duration="500"
+      indicator-color="rgba(255,255,255,0.5)"
+      indicator-active-color="#FF6B6B"
+    >
+      <block wx:for="{{bannerList}}" wx:key="index">
+        <swiper-item>
+          <image 
+            class="banner-image" 
+            src="{{item}}" 
+            mode="aspectFill"
+            data-index="{{index}}"
+            bindtap="onBannerTap"
+          />
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+
+
+
+  <!-- 酒店区域 -->
+  <view class="featured-section">
+    <!-- 标题 -->
+    <view class="section-header" wx:if="{{!loading}}">
+      <text class="section-title">🌟 推荐酒店</text>
+      <text class="section-subtitle">精选优质宠物酒店</text>
+    </view>
+    
+    <!-- 加载中 -->
+    <view wx:if="{{loading}}" class="loading-container">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">正在加载酒店数据...</text>
+    </view>
+
+    <!-- 推荐酒店列表 -->
+    <view wx:elif="{{recommendHotels.length > 0}}" class="featured-hotels">
+      <block wx:for="{{recommendHotels}}" wx:key="id">
+        <view class="featured-card" data-id="{{item.id}}" bindtap="onHotelTap">
+          <view class="featured-image">
+            <image
+              src="{{item.image}}"
+              mode="aspectFill"
+              class="featured-img"
+              lazy-load
+              binderror="onImageError"
+              data-hotel-id="{{item.id}}"
+            />
+            <view class="featured-rating">
+              <text class="rating-star">⭐</text>
+              <text class="rating-text">{{item.rating}}</text>
+            </view>
+            <view class="featured-badge">推荐</view>
+          </view>
+          <view class="featured-info">
+            <view class="featured-name">{{item.name}}</view>
+            <view class="featured-location">
+              <text class="location-icon">📍</text>
+              <text class="location-text">{{item.address}}</text>
+            </view>
+            <view class="featured-tags">
+              <block wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag">
+                <text class="tag">{{tag}}</text>
+              </block>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,166 @@
+<!--pages/mypet/mypet.wxml - 我的宠物页面-->
+<view class="pets-container">
+  <!-- 头部 -->
+  <view class="header">
+    <view class="header-content">
+      <text class="header-title">我的宠物</text>
+      <text class="header-subtitle">管理您的宠物信息</text>
+    </view>
+  </view>
+  
+  <!-- 主要内容 -->
+  <view class="main-content">
+    <!-- 未登录提示 -->
+    <view class="login-prompt" wx:if="{{!isLoggedIn}}">
+      <view class="prompt-icon">🔐</view>
+      <text class="prompt-title">需要登录</text>
+      <text class="prompt-desc">请先登录后查看和管理您的宠物</text>
+      <button class="login-btn" bindtap="goToLogin">立即登录</button>
+    </view>
+
+    <!-- 添加宠物按钮 -->
+    <view class="add-pet-section" wx:if="{{isLoggedIn && petsList.length < 5}}">
+      <view class="add-pet-card" bindtap="showAddPetModal">
+        <view class="add-icon">+</view>
+        <text class="add-text">添加宠物</text>
+        <text class="add-desc">最多可添加5只宠物</text>
+      </view>
+    </view>
+    
+    <!-- 宠物列表 -->
+    <view class="pets-list" wx:if="{{petsList.length > 0}}">
+      <view class="pet-card" wx:for="{{petsList}}" wx:key="id">
+        <view class="pet-avatar">
+          <image class="pet-image" src="{{item.avatar || '/images/banner-1.png'}}" mode="aspectFill" binderror="onAvatarLoadError" data-index="{{index}}"></image>
+        </view>
+        
+        <view class="pet-info">
+          <view class="pet-name-section">
+            <text class="pet-name">{{item.name}}</text>
+            <view class="pet-gender">
+              <text class="gender-icon">{{item.gender === 'male' ? '♂' : '♀'}}</text>
+            </view>
+          </view>
+          
+          <view class="pet-details">
+            <text class="pet-breed">{{item.breed}}</text>
+            <text class="pet-age">{{item.age}}岁</text>
+            <text class="pet-weight" wx:if="{{item.weight}}">{{item.weight}}斤</text>
+          </view>
+          
+          <!-- 备注信息 -->
+          <view class="pet-notes" wx:if="{{item.notes}}">
+            <text class="notes-text">{{item.notes}}</text>
+          </view>
+        </view>
+        
+        <view class="pet-actions">
+          <view class="action-btn edit-btn" catchtap="editPet" data-pet="{{item}}">
+            <text class="btn-icon">✏️</text>
+          </view>
+          <view class="action-btn delete-btn" catchtap="deletePet" data-pet-id="{{item.id}}">
+            <text class="btn-icon">🗑️</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{isLoggedIn && petsList.length === 0}}">
+      <view class="empty-icon">🐾</view>
+      <text class="empty-title">还没有添加宠物</text>
+      <text class="empty-desc">点击上方按钮添加您的第一只宠物</text>
+    </view>
+  </view>
+  
+  <!-- 添加/编辑宠物弹窗 -->
+  <view class="modal-mask" wx:if="{{showModal}}" bindtap="hideModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">{{isEditing ? '编辑宠物信息' : '添加新宠物'}}</text>
+        <view class="close-btn" bindtap="hideModal">×</view>
+      </view>
+      
+      <view class="modal-body">
+        <!-- 宠物头像 -->
+        <view class="form-item">
+          <text class="form-label">宠物头像</text>
+          <view class="avatar-upload {{uploadingAvatar ? 'uploading' : ''}}" bindtap="chooseAvatar">
+            <image class="avatar-preview" src="{{formData.avatar || '/images/banner-1.png'}}" mode="aspectFill"></image>
+            
+            <!-- 上传状态覆盖层 -->
+            <view class="upload-overlay" wx:if="{{!uploadingAvatar && !formData.avatar}}">
+              <text class="upload-text">📷 点击上传</text>
+            </view>
+            
+            <!-- 上传中状态 -->
+            <view class="uploading-overlay" wx:if="{{uploadingAvatar}}">
+              <view class="uploading-spinner"></view>
+              <text class="uploading-text">上传中...</text>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 宠物姓名 -->
+        <view class="form-item">
+          <text class="form-label">宠物姓名 *</text>
+          <input class="form-input" placeholder="请输入宠物姓名" value="{{formData.name}}" bindinput="onNameInput" maxlength="20"/>
+        </view>
+        
+        <!-- 宠物类型 -->
+        <view class="form-item">
+          <text class="form-label">宠物类型 *</text>
+          <picker bindchange="onTypeChange" value="{{typeIndex}}" range="{{petTypes}}">
+            <view class="picker-view">
+              {{petTypes[typeIndex] || '请选择宠物类型'}}
+            </view>
+          </picker>
+        </view>
+        
+        <!-- 品种 -->
+        <view class="form-item">
+          <text class="form-label">品种 *</text>
+          <input class="form-input" placeholder="请输入品种" value="{{formData.breed}}" bindinput="onBreedInput" maxlength="20"/>
+        </view>
+        
+        <!-- 性别 -->
+        <view class="form-item">
+          <text class="form-label">性别 *</text>
+          <view class="gender-options">
+            <view class="gender-option {{formData.gender === 'male' ? 'active' : ''}}" bindtap="selectGender" data-gender="male">
+              <text class="gender-text">♂ 公</text>
+            </view>
+            <view class="gender-option {{formData.gender === 'female' ? 'active' : ''}}" bindtap="selectGender" data-gender="female">
+              <text class="gender-text">♀ 母</text>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 年龄 -->
+        <view class="form-item">
+          <text class="form-label">年龄 *</text>
+          <input class="form-input" placeholder="请输入年龄，如：2岁" value="{{formData.age}}" bindinput="onAgeInput" maxlength="10"/>
+        </view>
+        
+        <!-- 体重 -->
+        <view class="form-item">
+          <text class="form-label">体重</text>
+          <input class="form-input" placeholder="请输入体重，如：5kg" value="{{formData.weight}}" bindinput="onWeightInput" maxlength="10"/>
+        </view>
+        
+
+        
+        <!-- 备注 -->
+        <view class="form-item">
+          <text class="form-label">备注</text>
+          <textarea class="form-textarea" placeholder="请输入其他需要说明的信息" value="{{formData.notes}}" bindinput="onNotesInput" maxlength="200"></textarea>
+        </view>
+      </view>
+      
+      <view class="modal-footer">
+        <button class="btn cancel-btn" bindtap="hideModal">取消</button>
+        <button class="btn confirm-btn" bindtap="savePet" disabled="{{!canSave}}">{{isEditing ? '保存' : '添加'}}</button>
+      </view>
+    </view>
+  </view>
+</view>

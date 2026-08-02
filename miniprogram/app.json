@@ -1,0 +1,74 @@
+{
+  "pages": [
+    "pages/welcome/welcome",
+    "pages/hotel/hotel",
+    "pages/search/search",
+    "pages/order/order",
+    "pages/user/user",
+    "pages/index/index",
+    "pages/favorites/favorites",
+    "pages/ai/ai",
+    "pages/mypet/mypet",
+    "pages/register/register",
+    "pages/payment/payment",
+    "pages/service/detail/detail",
+    "pages/order/order-create/order-create",
+    "pages/order/create/create",
+    "pages/order/success/success",
+    "pages/order/payment-failed/payment-failed",
+    "pages/order/room_detail/room_detail",
+    "pages/hotel/detail/detail",
+    "pages/hotel/room_detail/room_detail"
+  ],
+  "subpackages": [],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "宠宿无忧",
+    "navigationBarTextStyle": "black"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于获取附近的酒店信息和计算距离"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation"
+  ],
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "cloud": true,
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#ff9a76",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/hotel/hotel",
+        "text": "首页",
+        "iconPath": "images/首页.png",
+        "selectedIconPath": "images/首页 (1).png"
+      },
+      {
+        "pagePath": "pages/search/search",
+        "text": "搜索",
+        "iconPath": "images/搜索.png",
+        "selectedIconPath": "images/搜索 (1).png"
+      },
+      {
+        "pagePath": "pages/order/order",
+        "text": "订单",
+        "iconPath": "images/_订单.png",
+        "selectedIconPath": "images/_订单 (1).png"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "text": "我的",
+        "iconPath": "images/_我的.png",
+        "selectedIconPath": "images/_我的 (1).png"
+      }
+    ]
+  }
+}

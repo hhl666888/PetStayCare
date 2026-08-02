@@ -1,0 +1,225 @@
+<!--pages/order/create/create.wxml-->
+<view class="create-order-container">
+  <!-- 进度条 -->
+  <view class="progress-bar">
+    <view class="progress-item active">
+      <text class="progress-text">1. 选择{{orderType === 'service' ? '服务' : '房型'}}</text>
+    </view>
+    <view class="progress-item active">
+      <text class="progress-text">2. 填写信息</text>
+    </view>
+    <view class="progress-item">
+      <text class="progress-text">3. 确认支付</text>
+    </view>
+  </view>
+
+  <!-- 预订信息 -->
+  <view class="section">
+    <view class="section-title">{{orderType === 'service' ? '服务信息' : '预订信息'}}</view>
+    
+    <!-- 房型订单 -->
+    <view wx:if="{{orderType === 'room' && room}}" class="info-row">
+      <text class="info-label">房型名称</text>
+      <text class="info-value">{{room.name}}</text>
+    </view>
+    
+    <view wx:if="{{orderType === 'room' && room}}" class="info-row">
+      <text class="info-label">房型价格</text>
+      <text class="info-value price-text">¥{{room.price}}/晚</text>
+    </view>
+    
+    <!-- 服务订单 -->
+    <view wx:if="{{orderType === 'service'}}" class="info-row">
+      <text class="info-label">服务名称</text>
+      <text class="info-value">{{serviceName}}</text>
+    </view>
+    
+    <view wx:if="{{orderType === 'service'}}" class="info-row">
+      <text class="info-label">服务价格</text>
+      <text class="info-value price-text">¥{{servicePrice}}</text>
+    </view>
+
+    <view wx:if="{{hotel}}" class="info-row">
+      <text class="info-label">酒店名称</text>
+      <text class="info-value">{{hotel.name}}</text>
+    </view>
+
+    <view wx:if="{{hotel}}" class="info-row">
+      <text class="info-label">酒店地址</text>
+      <text class="info-value address-text">{{hotel.address}}</text>
+    </view>
+
+    <view wx:if="{{hotel}}" class="info-row">
+      <text class="info-label">联系电话</text>
+      <text class="info-value">{{hotel.phone}}</text>
+    </view>
+  </view>
+
+  <!-- 日期选择 - 房型订单 -->
+  <view wx:if="{{orderType === 'room'}}" class="section">
+    <view class="section-title">选择日期</view>
+    
+    <view class="info-row">
+      <text class="info-label">入住日期</text>
+      <picker mode="date" value="{{checkInDate}}" bindchange="onCheckInDateChange" start="{{today}}">
+        <view class="picker-value">
+          {{checkInDate || '请选择'}}
+        </view>
+      </picker>
+    </view>
+    
+    <view class="info-row">
+      <text class="info-label">退房日期</text>
+      <picker mode="date" value="{{checkOutDate}}" bindchange="onCheckOutDateChange" start="{{checkInDate}}">
+        <view class="picker-value">
+          {{checkOutDate || '请选择'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="info-row" wx:if="{{nights > 0}}">
+      <text class="info-label">住宿天数</text>
+      <text class="info-value">{{nights}}晚</text>
+    </view>
+  </view>
+
+  <!-- 预约时间 - 服务订单 -->
+  <view wx:if="{{orderType === 'service'}}" class="section">
+    <view class="section-title">选择预约时间</view>
+    
+    <view class="info-row">
+      <text class="info-label">预约日期</text>
+      <picker mode="date" value="{{appointmentDate}}" bindchange="onAppointmentDateChange" start="{{today}}">
+        <view class="picker-value">
+          {{appointmentDate || '请选择'}}
+        </view>
+      </picker>
+    </view>
+    
+    <view class="info-row">
+      <text class="info-label">预约时间</text>
+      <picker mode="time" value="{{appointmentTime}}" bindchange="onAppointmentTimeChange">
+        <view class="picker-value">
+          {{appointmentTime || '请选择'}}
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 宠物信息 -->
+  <view class="section">
+    <view class="section-title">宠物信息</view>
+
+    <!-- 没有宠物时的提示 -->
+    <view wx:if="{{pets.length === 0}}" class="empty-tip">
+      <text class="tip-text">请点击下方添加宠物</text>
+    </view>
+
+    <!-- 有宠物时显示宠物列表 -->
+    <view wx:for="{{pets}}" wx:key="index" class="pet-item">
+      <view class="pet-info-header">
+        <text class="pet-title">宠物{{index + 1}}: {{item.name}}</text>
+        <text wx:if="{{pets.length > 1}}" class="delete-btn" bindtap="removePet" data-index="{{index}}">删除</text>
+      </view>
+      
+      <view class="info-row">
+        <text class="info-label">类型</text>
+        <text class="info-value">{{item.type === 'cat' ? '猫咪' : '狗狗'}}</text>
+      </view>
+
+      <view class="info-row">
+        <text class="info-label">品种</text>
+        <text class="info-value">{{item.breed}}</text>
+      </view>
+
+      <view class="info-row">
+        <text class="info-label">年龄</text>
+        <text class="info-value">{{item.age}}</text>
+      </view>
+
+      <view class="info-row">
+        <text class="info-label">体重</text>
+        <text class="info-value">{{item.weight}}kg</text>
+      </view>
+
+      <view class="info-row">
+        <text class="info-label">性别</text>
+        <text class="info-value">{{item.gender === 'male' ? '公' : '母'}}</text>
+      </view>
+    </view>
+
+    <!-- 添加宠物按钮 -->
+    <button class="add-pet-btn" bindtap="showPetSelector">添加宠物</button>
+  </view>
+
+  <!-- 联系信息 -->
+  <view class="section">
+    <view class="section-title">联系信息</view>
+    
+    <view class="info-row">
+      <text class="info-label">联系人姓名</text>
+      <input class="form-input" value="{{contactName}}" data-field="contactName" bindinput="onContactInput" placeholder="请输入联系人姓名" />
+    </view>
+    
+    <view class="info-row">
+      <text class="info-label">联系电话</text>
+      <input class="form-input" type="number" value="{{contactPhone}}" data-field="contactPhone" bindinput="onContactInput" placeholder="请输入联系电话" />
+    </view>
+  </view>
+
+  <!-- 价格明细 -->
+  <view class="section">
+    <view class="section-title">价格明细</view>
+    
+    <!-- 房型订单费用 -->
+    <view wx:if="{{orderType === 'room'}}" class="info-row">
+      <text class="info-label">房型费用 (¥{{roomPrice}} × {{nights}}晚)</text>
+      <text class="info-value price-text">¥{{roomPrice * nights}}</text>
+    </view>
+    
+    <!-- 服务订单费用 -->
+    <view wx:if="{{orderType === 'service'}}" class="info-row">
+      <text class="info-label">服务费用</text>
+      <text class="info-value price-text">¥{{servicePrice}}</text>
+    </view>
+    
+    <view wx:if="{{discountAmount > 0}}" class="info-row">
+      <text class="info-label">优惠金额</text>
+      <text class="info-value discount-text">-¥{{discountAmount}}</text>
+    </view>
+    
+    <view class="info-row total-row">
+      <text class="info-label total-label">实付金额</text>
+      <text class="info-value total-price">¥{{actualPrice}}</text>
+    </view>
+  </view>
+
+  <!-- 服务条款 -->
+  <view class="section">
+    <checkbox-group bindchange="onTermsChange">
+      <label class="terms-row">
+        <checkbox value="agree" checked="{{agreeTerms}}" class="terms-checkbox"/>
+        <text class="terms-text">我已阅读并同意《宠宿无忧服务条款》和《退订政策》</text>
+      </label>
+    </checkbox-group>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="bottom-bar">
+    <view class="total-display">
+      <text class="total-text">合计: </text>
+      <text class="total-amount">¥{{actualPrice}}</text>
+    </view>
+    
+    <button class="submit-btn {{!agreeTerms || submitting ? 'disabled' : ''}}" bindtap="submitOrder" disabled="{{!agreeTerms || submitting}}">
+      <text wx:if="{{!submitting}}">{{orderType === 'service' ? '立即购买' : '立即预订'}}</text>
+      <text wx:else>处理中...</text>
+    </button>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-overlay">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+</view>

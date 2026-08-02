@@ -1,0 +1,215 @@
+<!--pages/register/register.wxml - 用户注册页面-->
+<view class="register-container">
+  <!-- 头部 -->
+  <view class="register-header">
+    <view class="register-title">
+      <text class="pet-icon">🐾</text>
+      <text class="title-text">用户注册</text>
+    </view>
+    <text class="register-subtitle">创建您的宠宿无忧账号</text>
+  </view>
+
+  <!-- 注册表单 -->
+  <form bindsubmit="handleRegister" class="register-form">
+    <!-- 用户头像 -->
+    <view class="form-group">
+      <text class="form-label">
+        <text class="required">*</text> 用户头像
+      </text>
+      <view class="avatar-container">
+        <view class="avatar-upload {{uploadingAvatar ? 'uploading' : ''}}" bindtap="chooseAvatar">
+          <block wx:if="{{formData.avatar}}">
+            <image 
+              class="avatar-preview" 
+              src="{{formData.avatar}}" 
+              mode="aspectFill"
+            ></image>
+            <!-- 上传中状态覆盖层 -->
+            <view class="uploading-overlay" wx:if="{{uploadingAvatar}}">
+              <text class="uploading-text">上传中...</text>
+            </view>
+          </block>
+          <block wx:else>
+            <view class="avatar-placeholder">
+              <text class="avatar-icon">{{uploadingAvatar ? '⏳' : '📷'}}</text>
+              <text class="avatar-hint">{{uploadingAvatar ? '正在上传' : '点击上传'}}</text>
+            </view>
+          </block>
+        </view>
+        
+      </view>
+    </view>
+
+    <!-- 基本信息 -->
+    <view class="form-row">
+      <view class="form-group">
+        <text class="form-label">
+          <text class="required">*</text> 账号
+        </text>
+        <input 
+          class="form-input" 
+          name="account" 
+          value="{{formData.account}}"
+          placeholder="请输入账号(登录使用)" 
+          bindinput="onAccountInput"
+          maxlength="20"
+        />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">
+          <text class="required">*</text> 用户名
+        </text>
+        <input 
+          class="form-input" 
+          name="username" 
+          value="{{formData.username}}"
+          placeholder="请输入用户名" 
+          bindinput="onUsernameInput"
+          maxlength="20"
+        />
+      </view>
+    </view>
+
+    <view class="form-row">
+      <view class="form-group">
+        <text class="form-label">
+          <text class="required">*</text> 手机号
+        </text>
+        <input 
+          class="form-input" 
+          name="phone" 
+          value="{{formData.phone}}"
+          type="number"
+          placeholder="请输入手机号" 
+          bindinput="onPhoneInput"
+          maxlength="11"
+        />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">
+          <text class="required">*</text> 密码
+        </text>
+        <input 
+          class="form-input" 
+          name="password" 
+          value="{{formData.password}}"
+          password="{{true}}"
+          placeholder="请输入密码" 
+          bindinput="onPasswordInput"
+          maxlength="20"
+        />
+      </view>
+    </view>
+
+    <view class="form-row">
+      <view class="form-group">
+        <text class="form-label">
+          <text class="required">*</text> 邮箱地址
+        </text>
+        <input 
+          class="form-input" 
+          name="email" 
+          value="{{formData.email}}"
+          placeholder="请输入邮箱地址" 
+          bindinput="onEmailInput"
+        />
+      </view>
+    </view>
+
+
+
+    <!-- 详细信息 -->
+    <view class="form-group">
+      <text class="form-label">
+        <text class="required">*</text> 真实姓名
+      </text>
+      <input 
+        class="form-input" 
+        name="realName" 
+        value="{{formData.realName}}"
+        placeholder="请输入真实姓名" 
+        bindinput="onRealNameInput"
+        maxlength="20"
+      />
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">
+        <text class="required">*</text> 性别
+      </text>
+      <view class="gender-options">
+        <view 
+          class="gender-option {{formData.gender === 'male' ? 'active' : ''}}"
+          bindtap="selectGender"
+          data-gender="male"
+        >
+          <text class="gender-text">♂ 男</text>
+        </view>
+        <view 
+          class="gender-option {{formData.gender === 'female' ? 'active' : ''}}"
+          bindtap="selectGender"
+          data-gender="female"
+        >
+          <text class="gender-text">♀ 女</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-row">
+      <view class="form-group">
+        <text class="form-label">
+          <text class="required">*</text> 出生日期
+        </text>
+        <picker 
+          mode="date" 
+          value="{{formData.birthDate}}" 
+          bindchange="onBirthDateChange"
+          start="1900-01-01"
+          end="{{maxDate}}"
+        >
+          <view class="picker-view">
+            {{formData.birthDate || '请选择出生日期'}}
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">用户状态</text>
+        <picker 
+          mode="selector" 
+          range="{{statusOptions}}" 
+          value="{{statusIndex}}" 
+          bindchange="onStatusChange"
+          disabled="{{true}}"
+        >
+          <view class="picker-view disabled">
+            {{statusOptions[statusIndex] || '正常'}}
+          </view>
+        </picker>
+      </view>
+    </view>
+
+
+
+    <!-- 提交按钮 -->
+    <view class="form-actions">
+      <button 
+        class="btn btn-primary {{submitting ? 'loading' : ''}}" 
+        formType="submit"
+        disabled="{{!canSubmit || submitting}}"
+      >
+        <view class="loading-spinner" wx:if="{{submitting}}"></view>
+        <text class="btn-text">{{submitting ? '注册中...' : '提交注册'}}</text>
+      </button>
+      <button 
+        class="btn btn-secondary" 
+        bindtap="goToLogin"
+        disabled="{{submitting}}"
+      >
+        返回登录
+      </button>
+    </view>
+  </form>
+</view>

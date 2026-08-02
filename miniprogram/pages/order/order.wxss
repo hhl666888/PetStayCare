@@ -1,0 +1,866 @@
+/* pages/order/order.wxss - 订单列表页面样式（美团风格） */
+.order-container, .login-container {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* 标签页头部 */
+.tab-header {
+  background: white;
+  padding: 0 20rpx;
+  display: flex;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 30rpx 10rpx;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.tab-text {
+  font-size: 28rpx;
+  color: #666;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.tab-item.active .tab-text {
+  color: #ff6b35;
+  font-weight: 600;
+}
+
+.tab-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40rpx;
+  height: 4rpx;
+  background: #ff6b35;
+  border-radius: 2rpx;
+  transition: all 0.3s ease;
+}
+
+/* 待支付角标 */
+.tab-badge {
+  position: absolute;
+  top: 15rpx;
+  right: 20rpx;
+  background: #ff4d4f;
+  color: white;
+  font-size: 20rpx;
+  min-width: 32rpx;
+  height: 32rpx;
+  line-height: 32rpx;
+  text-align: center;
+  border-radius: 16rpx;
+  padding: 0 8rpx;
+  font-weight: 600;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* 酒店信息卡片 */
+.hotel-info-card {
+  background: white;
+  margin: 20rpx;
+  padding: 30rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+
+.hotel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20rpx;
+}
+
+.hotel-title-section {
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.hotel-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.4;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.hotel-rating {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.rating-stars {
+  font-size: 24rpx;
+  color: #ffa500;
+}
+
+.rating-score {
+  font-size: 24rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+.hotel-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.phone-text {
+  font-size: 26rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+.hotel-address {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+  padding: 16rpx 20rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+}
+
+.address-icon {
+  font-size: 24rpx;
+  margin-top: 2rpx;
+  flex-shrink: 0;
+}
+
+.address-text {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.4;
+  word-break: break-all;
+}
+
+.address-pending {
+  color: #999;
+  font-style: italic;
+}
+
+.hotel-price {
+  display: flex;
+  align-items: baseline;
+  gap: 8rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.price-label {
+  font-size: 36rpx;
+  color: #ff6b35;
+  font-weight: 600;
+}
+
+.price-unit {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.price-original {
+  font-size: 24rpx;
+  color: #999;
+  text-decoration: line-through;
+}
+
+/* 订单列表 */
+.order-list {
+  padding: 20rpx;
+  padding-bottom: 120rpx;
+}
+
+/* 美团风格订单卡片 */
+.meituan-order-card {
+  background: white;
+  border-radius: 20rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.meituan-order-card:active {
+  transform: scale(0.98);
+}
+
+/* 订单状态条 */
+.status-bar {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 30rpx;
+  background: #f0f8ff;
+  position: relative;
+}
+
+.status-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #007aff;
+  margin-right: 15rpx;
+  flex-shrink: 0;
+}
+
+.status-text {
+  flex: 1;
+  font-size: 26rpx;
+  color: #007aff;
+  font-weight: 600;
+}
+
+.status-time {
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* 酒店信息卡片 */
+.hotel-card {
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.hotel-header {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+  margin-bottom: 20rpx;
+}
+
+.hotel-image {
+  width: 180rpx;
+  height: 140rpx;
+  border-radius: 12rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.hotel-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hotel-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+
+.hotel-name {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 600;
+  flex: 1;
+  line-height: 1.3;
+}
+
+.hotel-rating {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  flex-shrink: 0;
+}
+
+.price-per-night {
+  display: flex;
+  align-items: baseline;
+  gap: 8rpx;
+  margin-top: 8rpx;
+}
+
+.price-label {
+  font-size: 24rpx;
+  color: #666;
+  font-weight: 400;
+}
+
+.price-value {
+  font-size: 28rpx;
+  color: #ff6b35;
+  font-weight: 600;
+}
+
+.rating-stars {
+  font-size: 24rpx;
+  color: #ffa500;
+}
+
+.rating-score {
+  font-size: 24rpx;
+  color: #666;
+}
+
+/* 房型信息 */
+.room-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.room-details {
+  flex: 1;
+}
+
+.room-name {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 10rpx;
+}
+
+.room-tags {
+  display: flex;
+  gap: 10rpx;
+}
+
+.room-tag {
+  font-size: 20rpx;
+  color: #ff6b35;
+  background: #fff5f0;
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+  border: 1rpx solid #ff6b35;
+}
+
+/* 价格信息 */
+.price-section {
+  text-align: right;
+}
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 10rpx;
+  margin-bottom: 5rpx;
+}
+
+.original-price {
+  font-size: 24rpx;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.current-price {
+  font-size: 32rpx;
+  color: #ff6b35;
+  font-weight: 600;
+}
+
+.price-unit {
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* 预订信息 */
+.booking-info {
+  padding: 30rpx;
+  background: #fafafa;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15rpx 0;
+  border-bottom: 1rpx dashed #eee;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.info-value {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.appointment-time-row {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12rpx;
+  padding: 20rpx !important;
+  margin: 10rpx 0;
+}
+
+.appointment-time-row .info-label {
+  color: #fff;
+  font-weight: 600;
+}
+
+.appointment-time-row .info-value {
+  color: #fff;
+  font-weight: 600;
+  font-size: 28rpx;
+}
+
+.appointment-datetime-row {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  border-radius: 12rpx;
+  padding: 24rpx !important;
+  margin: 10rpx 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.appointment-datetime-row .info-label {
+  color: #fff;
+  font-weight: 700;
+  font-size: 28rpx;
+}
+
+.appointment-datetime-row .info-value {
+  color: #fff;
+  font-weight: 700;
+  font-size: 30rpx;
+  text-align: right;
+}
+
+/* 宠物信息 */
+.pets-section {
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.pets-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 600;
+}
+
+.pets-count {
+  font-size: 24rpx;
+  color: #666;
+  background: #f0f0f0;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+.pet-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.pet-item:last-child {
+  border-bottom: none;
+}
+
+.pet-avatar {
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.pet-image {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  border: 2rpx solid #f0f0f0;
+}
+
+.pet-details {
+  flex: 1;
+}
+
+.pet-name-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.pet-name {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 600;
+}
+
+.pet-tags {
+  display: flex;
+  gap: 8rpx;
+}
+
+.pet-tag {
+  font-size: 20rpx;
+  padding: 4rpx 10rpx;
+  border-radius: 10rpx;
+  background: #f0f0f0;
+}
+
+.pet-tag.gender {
+  background: #e3f2fd;
+  color: #0958d9;
+}
+
+.pet-tag.age {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+.pet-tag.weight {
+  background: #fff7e6;
+  color: #fa8c16;
+}
+
+.pet-breed {
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
+.pet-status {
+  display: flex;
+  gap: 8rpx;
+}
+
+.status-tag {
+  font-size: 20rpx;
+  padding: 4rpx 10rpx;
+  border-radius: 10rpx;
+  background: #f0f0f0;
+  color: #666;
+}
+
+.status-tag.vaccine {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+.status-tag.sterilization {
+  background: #fff1f0;
+  color: #cf1322;
+}
+
+/* 费用明细 */
+.cost-section {
+  padding: 30rpx;
+  background: #fff9e6;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.cost-title {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 20rpx;
+}
+
+.cost-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12rpx 0;
+  border-bottom: 1rpx dashed #eee;
+}
+
+.cost-item:last-child {
+  border-bottom: none;
+}
+
+.cost-label {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.cost-value {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.cost-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0 10rpx 0;
+  background: white;
+  border-radius: 12rpx;
+  margin-top: 15rpx;
+}
+
+.total-label {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 600;
+}
+
+.total-value {
+  font-size: 36rpx;
+  color: #ff6b35;
+  font-weight: 700;
+}
+
+/* 服务项目名称样式 */
+.service-name-row {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12rpx;
+  padding: 20rpx !important;
+  margin-bottom: 15rpx;
+}
+
+.service-name-row .info-label {
+  color: #fff;
+  font-weight: 600;
+}
+
+.service-name-row .info-value {
+  color: #fff;
+  font-weight: 700;
+  font-size: 28rpx;
+}
+
+/* 联系信息 */
+.contact-section {
+  padding: 30rpx;
+  background: #f8f9fa;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.contact-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15rpx 0;
+}
+
+.contact-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.contact-value {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+/* 操作按钮 */
+.action-section {
+  padding: 30rpx;
+  display: flex;
+  gap: 15rpx;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  flex: 1;
+  min-width: 140rpx;
+  height: 70rpx;
+  border-radius: 35rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  font-size: 24rpx;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.action-btn.primary {
+  background: #ff6b35;
+  color: white;
+}
+
+.action-btn.secondary {
+  background: white;
+  color: #666;
+  border: 2rpx solid #e0e0e0;
+}
+
+.action-btn.cancel {
+  background: #f5f5f5;
+  color: #999;
+  border: 2rpx solid #e0e0e0;
+}
+
+.action-btn.pay-btn {
+  background: linear-gradient(135deg, #ff6b35 0%, #ff9a76 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 4rpx 12rpx rgba(255, 107, 53, 0.3);
+}
+
+.action-btn:active {
+  transform: scale(0.95);
+}
+
+.btn-icon {
+  font-size: 28rpx;
+}
+
+.btn-text {
+  font-weight: 500;
+}
+
+/* 登录提示 */
+.login-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 60rpx;
+  text-align: center;
+}
+
+.login-icon {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
+  opacity: 0.3;
+}
+
+.login-title {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 15rpx;
+  font-weight: 500;
+}
+
+.login-subtitle {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 40rpx;
+  line-height: 1.4;
+}
+
+.go-login-btn {
+  background: #ff6b35;
+  color: white;
+  border-radius: 35rpx;
+  padding: 20rpx 50rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  border: none;
+}
+
+.go-login-btn::after {
+  border: none;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 60rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
+  opacity: 0.3;
+}
+
+.empty-title {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 15rpx;
+  font-weight: 500;
+}
+
+.empty-subtitle {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 40rpx;
+  line-height: 1.4;
+}
+
+.go-search-btn {
+  background: #ff6b35;
+  color: white;
+  border-radius: 35rpx;
+  padding: 20rpx 50rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  border: none;
+}
+
+.go-search-btn::after {
+  border: none;
+}
+
+/* 加载状态 */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid #f3f3f3;
+  border-top: 4rpx solid #ff6b35;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20rpx;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* 加载更多 */
+.load-more {
+  text-align: center;
+  padding: 30rpx;
+}
+
+.load-more-text {
+  font-size: 26rpx;
+  color: #999;
+}

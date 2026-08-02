@@ -1,0 +1,94 @@
+<!--pages/order/payment-failed/payment-failed.wxml-->
+<view class="payment-failed-container">
+  <!-- 失败图标 -->
+  <view class="icon-section">
+    <view class="icon-circle">
+      <text class="failed-icon">⚠️</text>
+    </view>
+    <view class="failed-title">支付未成功</view>
+    <view class="failed-desc">请尽快完成支付，订单{{countdownText}}</view>
+    <view class="countdown-timer" wx:if="{{remainingSeconds > 0}}">
+      <text class="timer-text">{{countdownText}}</text>
+    </view>
+    <view class="expired-tip" wx:else>
+      <text class="expired-text">订单已超时，请重新下单</text>
+    </view>
+  </view>
+
+  <!-- 订单信息 -->
+  <view class="order-info-section" wx:if="{{orderInfo}}">
+    <view class="hotel-info">
+      <text class="hotel-name">{{orderInfo.hotelName || orderInfo.hotel.name || orderInfo.name || '未知酒店'}}</text>
+      <text class="hotel-address">{{orderInfo.hotelAddress || orderInfo.hotel.address || orderInfo.address || '地址待完善'}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="info-row">
+      <text class="info-label">订单编号</text>
+      <text class="info-value copy-btn" bindtap="copyOrderId" data-id="{{orderId}}">{{orderId}}</text>
+    </view>
+    <view class="info-row" wx:if="{{orderInfo.checkInDate}}">
+      <text class="info-label">入住日期</text>
+      <text class="info-value">{{orderInfo.checkInDate}}</text>
+    </view>
+    <view class="info-row" wx:if="{{orderInfo.checkOutDate}}">
+      <text class="info-label">退房日期</text>
+      <text class="info-value">{{orderInfo.checkOutDate}}</text>
+    </view>
+    <view class="info-row" wx:if="{{orderInfo.nights}}">
+      <text class="info-label">住宿天数</text>
+      <text class="info-value">{{orderInfo.nights}}晚</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">支付金额</text>
+      <text class="info-value highlight">¥{{amount}}</text>
+    </view>
+  </view>
+
+  <!-- 失败原因 -->
+  <view class="reason-section">
+    <view class="section-title">常见原因</view>
+    <view class="reason-list">
+      <view class="reason-item">
+        <text class="reason-icon">💳</text>
+        <text class="reason-text">支付方式受限或余额不足</text>
+      </view>
+      <view class="reason-item">
+        <text class="reason-icon">📶</text>
+        <text class="reason-text">网络不稳定导致支付中断</text>
+      </view>
+      <view class="reason-item">
+        <text class="reason-icon">⏰</text>
+        <text class="reason-text">支付超时，订单被系统取消</text>
+      </view>
+      <view class="reason-item">
+        <text class="reason-icon">❌</text>
+        <text class="reason-text">您主动取消了支付</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-section">
+    <button class="retry-btn" bindtap="retryPay" wx:if="{{remainingSeconds > 0 && orderInfo.status !== 'cancelled'}}">
+      <text class="btn-icon">💰</text>
+      <text class="btn-text">重新支付</text>
+    </button>
+    <button class="retry-btn expired" bindtap="goToHotel" wx:else>
+      <text class="btn-icon">🔄</text>
+      <text class="btn-text">重新预订</text>
+    </button>
+    <button class="view-order-btn" bindtap="cancelPayment">
+      <text class="btn-icon">✖</text>
+      <text class="btn-text">取消支付</text>
+    </button>
+  </view>
+
+  <!-- 提示信息 -->
+  <view class="tip-section">
+    <view class="tip-icon">💡</view>
+    <view class="tip-content">
+      <text class="tip-text">提示：</text>
+      <text class="tip-text">待支付订单超过15分钟将自动取消，请尽快完成支付</text>
+    </view>
+  </view>
+</view>

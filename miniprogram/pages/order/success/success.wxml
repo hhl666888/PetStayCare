@@ -1,0 +1,81 @@
+<!--pages/order/success/success.wxml-->
+<view class="success-container">
+  <!-- 简洁成功头部 -->
+  <view class="success-header">
+    <view class="success-icon">
+      <view class="success-check">✓</view>
+    </view>
+    <view class="success-content">
+      <text class="success-title">
+        {{orderInfo.status === 'paid' ? '支付成功！' : (orderInfo.orderType === 'service' ? '购买成功！' : '预订成功！')}}
+      </text>
+      <text class="success-desc">
+        {{orderInfo.orderType === 'service' ? '您的服务已购买成功' : '您的订单已提交成功'}}
+      </text>
+      <view class="order-number">订单号：{{orderId}}</view>
+    </view>
+  </view>
+
+  <!-- 简洁订单卡片 -->
+  <view wx:if="{{orderInfo && !loading}}" class="order-card">
+    <!-- 酒店信息 -->
+    <view class="hotel-section">
+      <view class="hotel-info">
+        <view class="hotel-name">{{orderInfo.hotel.name}}</view>
+        <view class="hotel-address">
+          <text class="address-icon">📍</text>
+          <text class="address-text">{{orderInfo.hotel.address}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 订单详情 -->
+    <view class="order-details">
+      <!-- 房型订单 -->
+      <view wx:if="{{orderInfo.orderType === 'room' && orderInfo.room}}" class="detail-section">
+        <view class="detail-content">
+          <view class="room-info">
+            <text class="room-name">{{orderInfo.room.name}}</text>
+            <text class="room-nights">{{orderInfo.room.nights}}晚</text>
+          </view>
+          <view class="date-info">
+            <text class="date-text">{{orderInfo.room.checkInDate}} ~ {{orderInfo.room.checkOutDate}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 服务订单 -->
+      <view wx:if="{{orderInfo.orderType === 'service' && orderInfo.service}}" class="detail-section">
+        <view class="detail-content">
+          <text class="service-name">{{orderInfo.service.name}}</text>
+        </view>
+      </view>
+
+      <!-- 宠物信息 -->
+      <view wx:if="{{orderInfo.pets.length > 0}}" class="detail-section">
+        <view class="detail-content">
+          <view class="pets-list">
+            <block wx:for="{{orderInfo.pets}}" wx:key="index">
+              <view class="pet-tag">
+                <text class="pet-emoji">{{item.type === 'cat' ? '🐱' : '🐕'}}</text>
+                <text class="pet-text">{{item.name}} · {{item.breed}}</text>
+              </view>
+            </block>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-section">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载订单信息...</text>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <button class="action-btn primary" bindtap="onViewOrder">查看订单</button>
+    <button class="action-btn secondary" bindtap="goHome">返回首页</button>
+  </view>
+</view>

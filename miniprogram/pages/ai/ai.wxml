@@ -1,0 +1,37 @@
+<!--pages/ai/ai.wxml-->
+<view class="ai-container">
+  <!-- 欢迎提示 -->
+  <view class="welcome-section">
+    <view class="ai-header">
+      <text class="ai-title">🤖 AI助手</text>
+      <text class="ai-subtitle">智能问答，贴心服务</text>
+    </view>
+    
+    <view class="quick-questions">
+      <view class="question-title">💡 您可能想问：</view>
+      <view class="question-list">
+        <view class="question-item" bindtap="askQuestion" data-question="宠物寄养需要注意什么？">
+          <text class="question-text">🐾 宠物寄养需要注意什么？</text>
+        </view>
+        <view class="question-item" bindtap="askQuestion" data-question="如何选择合适的宠物酒店？">
+          <text class="question-text">🏨 如何选择合适的宠物酒店？</text>
+        </view>
+        <view class="question-item" bindtap="askQuestion" data-question="宠物需要准备什么物品？">
+          <text class="question-text">📦 宠物需要准备什么物品？</text>
+        </view>
+        <view class="question-item" bindtap="askQuestion" data-question="宠物不适应新环境怎么办？">
+          <text class="question-text">😰 宠物不适应新环境怎么办？</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- AI对话界面 -->
+  <view class="chat-section">
+    <agent-ui 
+      agentConfig="{{agentConfig}}" 
+      showBotAvatar="{{showBotAvatar}}" 
+      chatMode="{{chatMode}}"
+    ></agent-ui>
+  </view>
+</view>

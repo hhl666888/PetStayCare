@@ -1,0 +1,104 @@
+/* pages/ai/ai.wxss */
+.ai-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 0;
+}
+
+/* 欢迎区域 */
+.welcome-section {
+  padding: 40rpx 30rpx 30rpx;
+  color: white;
+}
+
+.ai-header {
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.ai-title {
+  display: block;
+  font-size: 48rpx;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+  text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.3);
+}
+
+.ai-subtitle {
+  font-size: 28rpx;
+  opacity: 0.9;
+}
+
+/* 快速问题区域 */
+.quick-questions {
+  background: rgba(255,255,255,0.15);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  backdrop-filter: blur(10rpx);
+  border: 1rpx solid rgba(255,255,255,0.2);
+}
+
+.question-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  color: white;
+}
+
+.question-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.question-item {
+  background: rgba(255,255,255,0.9);
+  border-radius: 12rpx;
+  padding: 24rpx 20rpx;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.question-item:hover {
+  transform: translateY(-2rpx);
+  box-shadow: 0 8rpx 16rpx rgba(0,0,0,0.15);
+}
+
+.question-item:active {
+  transform: translateY(0);
+  box-shadow: 0 4rpx 8rpx rgba(0,0,0,0.1);
+}
+
+.question-text {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.4;
+}
+
+/* 对话区域 */
+.chat-section {
+  flex: 1;
+  background: white;
+  border-top-left-radius: 30rpx;
+  border-top-right-radius: 30rpx;
+  min-height: 60vh;
+}
+
+/* 响应式调整 */
+@media (max-width: 750rpx) {
+  .ai-title {
+    font-size: 42rpx;
+  }
+  
+  .ai-subtitle {
+    font-size: 26rpx;
+  }
+  
+  .question-text {
+    font-size: 26rpx;
+  }
+  
+  .quick-questions {
+    padding: 24rpx;
+  }
+}

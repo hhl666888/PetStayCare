@@ -1,0 +1,78 @@
+<!--pages/payment/payment.wxml-->
+<view class="payment-container">
+  <!-- 微信支付风格头部 -->
+  <view class="payment-header">
+    <view class="merchant-info">
+      <view class="payment-time">
+        订单提交成功，请在 <text class="time-highlight">{{countdownText}}</text> 内完成支付
+      </view>
+    </view>
+
+    <!-- 支付金额 - 微信支付风格 -->
+    <view class="amount-section">
+      <view class="currency-symbol">¥</view>
+      <view class="amount-value">{{amount}}</view>
+    </view>
+
+    <view class="order-desc">{{orderDesc}}</view>
+  </view>
+
+  <!-- 订单信息 -->
+  <view class="order-info">
+    <view class="section-title">订单信息</view>
+
+    <view class="info-row">
+      <view class="info-label">订单编号</view>
+      <view class="info-value">{{orderId}}</view>
+    </view>
+
+    <view class="info-row">
+      <view class="info-label">支付金额</view>
+      <view class="info-value highlight">¥{{amount}}</view>
+    </view>
+  </view>
+
+  <!-- 支付方式选择 -->
+  <view class="payment-methods">
+    <view class="section-title">支付方式</view>
+
+    <view class="payment-method-item active">
+      <view class="method-left">
+        <view class="method-icon wechat">
+          <text class="icon-text">💚</text>
+        </view>
+        <view class="method-info">
+          <view class="method-name">微信支付</view>
+          <view class="method-desc">安全快捷</view>
+        </view>
+      </view>
+      <view class="method-right">
+        <view class="radio-icon checked">✓</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部支付按钮 - 微信支付风格 -->
+  <view class="bottom-bar">
+    <button class="cancel-btn" bindtap="cancelPay">取消支付</button>
+    <button class="pay-btn {{paying ? 'disabled' : ''}}" bindtap="confirmPay" disabled="{{paying}}">
+      <text wx:if="{{!paying}}">继续支付</text>
+      <text wx:else>支付中...</text>
+    </button>
+  </view>
+
+  <!-- 安全提示 -->
+  <view class="security-tip">
+    <text class="tip-icon">🔒</text>
+    <text class="tip-text">支付安全由微信担保，请放心支付</text>
+  </view>
+
+  <!-- 遮罩层 -->
+  <view wx:if="{{paying}}" class="loading-overlay">
+    <view class="loading-content">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">支付中...</text>
+    </view>
+  </view>
+</view>
+

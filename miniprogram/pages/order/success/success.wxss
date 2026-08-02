@@ -1,0 +1,352 @@
+/* pages/order/success/success.wxss - 美团风格 */
+.success-container {
+  padding: 0;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* 成功头部 */
+.success-header {
+  background: linear-gradient(135deg, #FF8C00 0%, #FF6B35 100%);
+  padding: 60rpx 40rpx 50rpx;
+  display: flex;
+  align-items: center;
+  gap: 30rpx;
+}
+
+.success-icon {
+  width: 120rpx;
+  height: 120rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10rpx);
+}
+
+.success-check {
+  font-size: 80rpx;
+  color: #FFFFFF;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.success-content {
+  flex: 1;
+  text-align: left;
+}
+
+.success-title {
+  font-size: 44rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.success-desc {
+  font-size: 28rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 16rpx;
+  line-height: 1.4;
+}
+
+.order-number {
+  font-size: 24rpx;
+  color: #999;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  display: inline-block;
+}
+
+/* 订单卡片 */
+.order-card {
+  background: white;
+  margin: 20rpx 24rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.08);
+}
+
+/* 酒店信息区域 */
+.hotel-section {
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.hotel-info {
+  flex: 1;
+}
+
+.hotel-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 12rpx;
+}
+
+.hotel-address {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.address-icon {
+  font-size: 24rpx;
+}
+
+.address-text {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.4;
+}
+
+.order-status {
+  font-size: 24rpx;
+  color: #FF8C00;
+  background: #FFF4E6;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  font-weight: 500;
+}
+
+.order-status.pending {
+  color: #1677FF;
+  background: #F0F5FF;
+}
+
+/* 订单详情 */
+.order-details {
+  padding: 30rpx;
+}
+
+.detail-section {
+  margin-bottom: 30rpx;
+}
+
+.detail-section:last-child {
+  margin-bottom: 0;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.detail-title {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.detail-price {
+  font-size: 28rpx;
+  color: #FF8C00;
+  font-weight: bold;
+}
+
+.detail-content {
+  padding-left: 16rpx;
+}
+
+.room-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.room-name {
+  font-size: 26rpx;
+  color: #333;
+}
+
+.room-nights {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.date-info {
+  margin-bottom: 8rpx;
+}
+
+.date-text {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.service-name {
+  font-size: 26rpx;
+  color: #333;
+}
+
+/* 宠物列表 */
+.pets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.pet-tag {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background: #F8F9FA;
+  padding: 8rpx 12rpx;
+  border-radius: 8rpx;
+}
+
+.pet-emoji {
+  font-size: 24rpx;
+}
+
+.pet-text {
+  font-size: 24rpx;
+  color: #333;
+}
+
+/* 费用汇总 */
+.price-summary {
+  padding: 30rpx;
+  border-top: 1rpx solid #f0f0f0;
+  background: #FAFAFA;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12rpx 0;
+}
+
+.price-row.total {
+  border-top: 1rpx solid #e0e0e0;
+  padding-top: 20rpx;
+  margin-top: 8rpx;
+}
+
+.price-row.discount {
+  color: #52C41A;
+}
+
+.price-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.price-value {
+  font-size: 26rpx;
+  color: #333;
+}
+
+.discount-amount {
+  color: #52C41A !important;
+}
+
+.total-amount {
+  font-size: 32rpx;
+  color: #FF8C00;
+  font-weight: bold;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+  padding: 30rpx 24rpx;
+  background: white;
+  margin-top: 20rpx;
+}
+
+.action-btn {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 12rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+.action-btn.secondary {
+  background: #F5F5F5;
+  color: #333;
+}
+
+.action-btn.primary {
+  background: #FF8C00;
+  color: #FFFFFF;
+}
+
+/* 底部信息 */
+.footer-info {
+  padding: 20rpx 24rpx 40rpx;
+  text-align: center;
+}
+
+.countdown-info {
+  margin-bottom: 20rpx;
+}
+
+.countdown-text {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.contact-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+}
+
+.contact-text {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.contact-link {
+  font-size: 24rpx;
+  color: #1677FF;
+  text-decoration: underline;
+}
+
+/* 加载状态 */
+.loading-section {
+  padding: 100rpx 40rpx;
+  text-align: center;
+  background: white;
+  margin: 20rpx 24rpx;
+  border-radius: 16rpx;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid #f3f3f3;
+  border-top: 4rpx solid #FF8C00;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20rpx;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #666;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

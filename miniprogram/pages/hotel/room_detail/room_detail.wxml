@@ -1,0 +1,147 @@
+<!--pages/hotel/room_detail/room_detail.wxml-->
+<view class="room-detail-container">
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading-state">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">正在加载房间信息...</text>
+  </view>
+
+  <!-- 房间详情内容 -->
+  <block wx:elif="{{room && room.name}}">
+    <scroll-view class="detail-content" scroll-y="true" enhanced="true" bounces="true" show-scrollbar="false">
+      <!-- 图片轮播 -->
+      <view class="image-section">
+        <swiper
+          class="room-image-swiper"
+          indicator-dots="{{room.images.length > 1}}"
+          autoplay="{{room.images.length > 1}}"
+          interval="3000"
+          duration="500"
+          indicator-color="rgba(255,255,255,0.5)"
+          indicator-active-color="#FF6B6B"
+          circular="true"
+          bindchange="onSwiperChange"
+        >
+          <block wx:for="{{room.images}}" wx:key="index" wx:for-item="img">
+            <swiper-item>
+              <image
+                src="{{img}}"
+                mode="aspectFill"
+                class="room-swiper-image"
+                bindtap="onImagePreview"
+                data-images="{{room.images}}"
+                data-index="{{index}}"
+                lazy-load="true"
+              />
+            </swiper-item>
+          </block>
+        </swiper>
+
+        <!-- 图片指示器 -->
+        <view wx:if="{{room.images && room.images.length > 1}}" class="image-indicator">
+          <text>{{currentImageIndex + 1}}/{{room.images.length}}</text>
+        </view>
+      </view>
+
+      <!-- 房间基本信息 -->
+      <view class="room-info-card">
+        <view class="room-header">
+          <text class="room-name">{{room.name}}</text>
+          <view wx:if="{{room.discount > 0}}" class="discount-badge">
+            <text class="discount-text">{{room.discountDesc}}</text>
+          </view>
+        </view>
+
+        <!-- 价格区域 -->
+        <view class="price-section">
+          <view class="current-price">
+            <text class="price-symbol">¥</text>
+            <text class="price-number">{{room.price}}</text>
+            <text class="price-unit">/晚</text>
+          </view>
+          <view wx:if="{{room.originalPrice > room.price}}" class="original-price">
+            ¥{{room.originalPrice}}
+          </view>
+          <view wx:if="{{room.savings > 0}}" class="savings-info">
+            <text class="savings-text">省¥{{room.savings}}</text>
+          </view>
+        </view>
+
+        <!-- 房间描述 -->
+        <view wx:if="{{room.description}}" class="description-section">
+          <text class="section-title">房间介绍</text>
+          <text class="description-text">{{room.description}}</text>
+        </view>
+      </view>
+
+      <!-- 房间规格 -->
+      <view class="specs-card">
+        <text class="section-title">房间规格</text>
+        <view class="specs-grid">
+          <view wx:if="{{room.capacity}}" class="spec-item">
+            <text class="spec-icon">🏠</text>
+            <text class="spec-label">容量</text>
+            <text class="spec-value">{{room.capacity}}只宠物</text>
+          </view>
+          <view wx:if="{{room.size}}" class="spec-item">
+            <text class="spec-icon">📏</text>
+            <text class="spec-label">面积</text>
+            <text class="spec-value">{{room.size}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 房间设施 -->
+      <view wx:if="{{room.facilities && room.facilities.length > 0}}" class="facilities-card">
+        <text class="section-title">房间设施</text>
+        <view class="facilities-list">
+          <text
+            wx:for="{{room.facilities}}"
+            wx:key="index"
+            class="facility-tag"
+          >
+            {{item}}
+          </text>
+        </view>
+      </view>
+
+      <!-- 酒店信息 -->
+      <view wx:if="{{hotel && hotel.name}}" class="hotel-info-card">
+        <text class="section-title">所属酒店</text>
+        <view class="hotel-info" bindtap="onViewHotel">
+          <view class="hotel-left">
+            <text class="hotel-name">{{hotel.name}}</text>
+            <text class="hotel-address">{{hotel.address}}</text>
+          </view>
+          <view class="hotel-arrow">→</view>
+        </view>
+      </view>
+    </scroll-view>
+
+    <!-- 底部操作栏 -->
+    <view class="bottom-bar">
+      <view class="price-summary">
+        <text class="total-label">总价</text>
+        <text class="total-price">¥{{room.price}}</text>
+      </view>
+      <button
+        wx:if="{{room.stock <= 0}}"
+        class="action-btn sold-out"
+        disabled
+      >
+        已售罄
+      </button>
+      <button wx:else class="action-btn buy" bindtap="onBuyRoom">
+        立即抢购
+      </button>
+    </view>
+  </block>
+
+  <!-- 空状态 -->
+  <view wx:else class="empty-state">
+    <text class="empty-icon">🏠</text>
+    <text class="empty-title">房间信息不存在</text>
+    <text class="empty-desc">请稍后重试或联系客服</text>
+    <button class="retry-btn" bindtap="loadRoomDetail">重新加载</button>
+  </view>
+</view>

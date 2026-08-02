@@ -1,0 +1,36 @@
+
+
+<!-- 宠宿无忧简洁欢迎页面 -->
+<view class="welcome-container">
+  <!-- 背景装饰 -->
+  <view class="bg-decoration">
+    <view class="circle circle-1"></view>
+    <view class="circle circle-2"></view>
+  </view>
+  
+  <!-- 居中的主要内容区域 -->
+  <view class="center-content">
+    <!-- 宠物图标区域 -->
+    <view class="pet-icon-wrap">
+      <view class="pet-icon">
+        <text class="icon-paw">🐾</text>
+        <view class="icon-heart">❤️</view>
+      </view>
+    </view>
+    
+    <!-- 标题区域 -->
+    <view class="title-wrap">
+      <view class="main-title">宠宿无忧</view>
+      <view class="sub-title">让每一次出行都充满温暖</view>
+    </view>
+    
+
+    
+
+    
+    <!-- 开始按钮 -->
+    <button class="enter-btn" bindtap="enterMain">
+      开始使用
+    </button>
+  </view>
+</view>

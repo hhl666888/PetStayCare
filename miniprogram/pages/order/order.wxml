@@ -1,0 +1,266 @@
+<!--pages/order/order.wxml - 订单列表页面（美团风格）-->
+<wxs module="utils">
+// 格式化日期为"年月日"格式
+function formatDate(dateStr) {
+  if (!dateStr || dateStr.indexOf('-') === -1) return dateStr;
+  var parts = dateStr.split('-');
+  if (parts.length !== 3) return dateStr;
+  return parts[0] + '年' + parseInt(parts[1]) + '月' + parseInt(parts[2]) + '日';
+}
+
+// 格式化时间为友好格式
+function formatTime(timeStr) {
+  if (!timeStr) return '';
+  // 如果传入的是空字符串，返回空
+  if (timeStr === '') return '';
+  // 如果包含冒号，说明是时间格式
+  if (timeStr.indexOf(':') === -1) return timeStr;
+  var parts = timeStr.split(':');
+  var hour = parseInt(parts[0]);
+  var minute = parts[1];
+  var period = hour < 12 ? '上午' : (hour < 18 ? '下午' : '晚上');
+  var displayHour = hour % 12 || 12;
+  return period + displayHour + ':' + minute;
+}
+
+// 从日期时间字符串中提取时间
+function extractTime(dateTimeStr) {
+  if (!dateTimeStr) return '';
+  // 尝试从 "2026-03-15 10:00" 格式中提取时间
+  if (dateTimeStr.indexOf(' ') !== -1) {
+    var parts = dateTimeStr.split(' ');
+    return parts[parts.length - 1];
+  }
+  return '';
+}
+
+module.exports = {
+  formatDate: formatDate,
+  formatTime: formatTime,
+  extractTime: extractTime
+};
+</wxs>
+
+<view class="order-container" wx:if="{{hasValidUser}}">
+  <!-- 头部标签页 -->
+  <view class="tab-header">
+    <view class="tab-item {{currentTab === 'all' ? 'active' : ''}}" bindtap="switchTab" data-tab="all">
+      <text class="tab-text">全部</text>
+      <view class="tab-indicator" wx:if="{{currentTab === 'all'}}"></view>
+    </view>
+    <view class="tab-item {{currentTab === 'cancelled' ? 'active' : ''}}" bindtap="switchTab" data-tab="cancelled">
+      <text class="tab-text">已取消</text>
+      <view class="tab-indicator" wx:if="{{currentTab === 'cancelled'}}"></view>
+    </view>
+    <view class="tab-item {{currentTab === 'pending' ? 'active' : ''}}" bindtap="switchTab" data-tab="pending">
+      <text class="tab-text">待支付</text>
+      <view class="tab-badge" wx:if="{{pendingCount > 0}}">{{pendingCount}}</view>
+      <view class="tab-indicator" wx:if="{{currentTab === 'pending'}}"></view>
+    </view>
+    <view class="tab-item {{currentTab === 'paid' ? 'active' : ''}}" bindtap="switchTab" data-tab="paid">
+      <text class="tab-text">已支付</text>
+      <view class="tab-indicator" wx:if="{{currentTab === 'paid'}}"></view>
+    </view>
+    <view class="tab-item {{currentTab === 'ongoing' ? 'active' : ''}}" bindtap="switchTab" data-tab="ongoing">
+      <text class="tab-text">进行中</text>
+      <view class="tab-indicator" wx:if="{{currentTab === 'ongoing'}}"></view>
+    </view>
+    <view class="tab-item {{currentTab === 'completed' ? 'active' : ''}}" bindtap="switchTab" data-tab="completed">
+      <text class="tab-text">已完成</text>
+      <view class="tab-indicator" wx:if="{{currentTab === 'completed'}}"></view>
+    </view>
+  </view>
+
+  <!-- 订单列表 -->
+  <view class="order-list" wx:if="{{filteredOrders.length > 0 && hasValidUser}}">
+    <view class="meituan-order-card" wx:for="{{filteredOrders}}" wx:key="id" bindtap="onOrderDetail" data-id="{{item.id}}">
+      <!-- 订单状态条 -->
+      <view class="status-bar" style="background-color: {{item.statusBgColor}};">
+        <view class="status-dot" style="background-color: {{item.statusColor}};"></view>
+        <text class="status-text" style="color: {{item.statusColor}};">{{item.statusText}}</text>
+        <!-- 待支付订单显示倒计时 -->
+        <text class="countdown-text" wx:if="{{item.status === 'pending'}}">
+          {{item.countdownText || '支付倒计时：加载中...'}}
+        </text>
+        <text class="status-time" wx:else>{{item.updateTime}}</text>
+      </view>
+
+      <!-- 酒店信息卡片 -->
+      <view class="hotel-info-card">
+        <view class="hotel-header">
+          <view class="hotel-title-section">
+            <text class="hotel-name">{{item.hotel.name}}</text>
+            <view class="hotel-rating" wx:if="{{item.hotel.rating}}">
+              <text class="rating-stars">⭐</text>
+              <text class="rating-score">{{item.hotel.rating}}</text>
+            </view>
+          </view>
+          <view class="hotel-contact" wx:if="{{item.hotel.phone && item.hotel.phone !== '暂无电话'}}">
+            <text class="phone-text">📞{{item.hotel.phone}}</text>
+          </view>
+        </view>
+        <view class="hotel-address" wx:if="{{item.hotel.address && item.hotel.address !== '地址待完善' && item.hotel.address !== '暂无地址'}}">
+          <text class="address-icon">📍</text>
+          <text class="address-text">{{item.hotel.address}}</text>
+        </view>
+        <view class="hotel-address" wx:else>
+          <text class="address-icon">📍</text>
+          <text class="address-text address-pending">{{item.hotel.address || '地址待完善'}}</text>
+        </view>
+        <view class="hotel-price" wx:if="{{item.roomPrice}}">
+          <text class="price-label">¥{{item.roomPrice}}</text>
+          <text class="price-unit">/晚</text>
+          <text class="price-original" wx:if="{{item.room.originalPrice}}">¥{{item.room.originalPrice}}</text>
+        </view>
+      </view>
+
+      <!-- 预订信息 -->
+      <view class="booking-info">
+        <!-- 房型订单信息 -->
+        <view wx:if="{{item.orderType === 'room' || (item.checkInDate && !item.orderType)}}">
+          <view wx:if="{{item.roomName}}" class="info-row">
+            <text class="info-label">房型</text>
+            <text class="info-value">{{item.roomName}}</text>
+          </view>
+          <view wx:if="{{item.checkInDate}}" class="info-row">
+            <text class="info-label">入住时间</text>
+            <text class="info-value">{{item.checkInDate}}</text>
+          </view>
+          <view wx:if="{{item.checkOutDate}}" class="info-row">
+            <text class="info-label">退房时间</text>
+            <text class="info-value">{{item.checkOutDate}}</text>
+          </view>
+          <view wx:if="{{item.nights}}" class="info-row">
+            <text class="info-label">住宿天数</text>
+            <text class="info-value">{{item.nights}}晚</text>
+          </view>
+        </view>
+
+        <!-- 服务订单信息 -->
+        <view wx:if="{{item.orderType === 'service' || item.serviceName}}">
+          <view wx:if="{{item.serviceName}}" class="info-row">
+            <text class="info-label">服务项目</text>
+            <text class="info-value">{{item.serviceName}}</text>
+          </view>
+          <view wx:if="{{item.appointmentTime || item.appointmentDateTime}}" class="info-row appointment-datetime-row">
+            <text class="info-label">🕒 预约时间</text>
+            <text class="info-value">{{utils.formatTime(item.appointmentTime || utils.extractTime(item.appointmentDateTime))}}</text>
+          </view>
+          <view wx:if="{{item.appointmentDate}}" class="info-row appointment-time-row">
+            <text class="info-label">📅 预约日期</text>
+            <text class="info-value">{{utils.formatDate(item.appointmentDate)}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 宠物信息 -->
+      <view class="pets-section">
+        <view class="pets-header">
+          <text class="section-title">🐾 宠物信息</text>
+          <text class="pets-count">共{{item.pets.length}}只</text>
+        </view>
+        <view class="pets-list">
+          <view class="pet-item" wx:for="{{item.pets}}" wx:for-item="pet" wx:key="id">
+            <view class="pet-avatar">
+              <image class="pet-image" src="{{pet.avatar}}" mode="aspectFill" lazy-load binderror="onPetAvatarError" data-pet-index="{{index}}" data-avatar-index="{{petIndex}}"></image>
+            </view>
+            <view class="pet-details">
+              <view class="pet-name-row">
+                <text class="pet-name">{{pet.name}}</text>
+                <view class="pet-tags">
+                  <text class="pet-tag gender">{{pet.gender === 'male' ? '♂' : '♀'}}</text>
+                  <text class="pet-tag age" wx:if="{{pet.age}}">{{pet.age}}岁</text>
+                  <text class="pet-tag weight" wx:if="{{pet.weight}}">{{pet.weight}}斤</text>
+                </view>
+              </view>
+              <text class="pet-breed">{{pet.type}} · {{pet.breed}}</text>
+              <view class="pet-status">
+                <text class="status-tag vaccine" wx:if="{{pet.vaccine}}">已疫苗</text>
+                <text class="status-tag sterilization" wx:if="{{pet.sterilization}}">已绝育</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 费用明细 -->
+      <view class="cost-section">
+        <view class="cost-title">费用明细</view>
+
+        <view class="cost-total">
+          <text class="total-label">实付金额</text>
+          <text class="total-value">¥{{item.actualPrice}}</text>
+        </view>
+      </view>
+
+      <!-- 联系信息 -->
+      <view class="contact-section">
+        <view class="contact-row">
+          <text class="contact-label">联系人</text>
+          <text class="contact-value">{{item.contactName}}</text>
+        </view>
+        <view class="contact-row">
+          <text class="contact-label">联系电话</text>
+          <text class="contact-value">{{item.contactPhone}}</text>
+        </view>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="action-section">
+
+        <button class="action-btn secondary" bindtap="onRebook" data-hotel-id="{{item.hotel.id}}" catchtap="stopPropagation" wx:if="{{item.status === 'completed'}}">
+          <text class="btn-icon">🔄</text>
+          <text class="btn-text">再次预订</text>
+        </button>
+        
+        <button class="action-btn secondary" bindtap="onReview" data-id="{{item.id}}" catchtap="stopPropagation" wx:if="{{item.status === 'completed'}}">
+          <text class="btn-icon">⭐</text>
+          <text class="btn-text">评价订单</text>
+        </button>
+        
+        <button class="action-btn cancel" catchtap="onCancelOrder" data-id="{{item._id || item.id}}" wx:if="{{item.status === 'pending'}}">
+          <text class="btn-icon">❌</text>
+          <text class="btn-text">取消订单</text>
+        </button>
+
+        <button class="action-btn pay-btn" catchtap="onGoToPay" data-id="{{item._id || item.id}}" data-order-id="{{item._id || item.id}}" wx:if="{{item.status === 'pending'}}">
+          <text class="btn-icon">💳</text>
+          <text class="btn-text">去支付</text>
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:elif="{{!loading && hasValidUser}}">
+    <view class="empty-icon">📋</view>
+    <text class="empty-title">暂无订单</text>
+    <text class="empty-subtitle">您还没有相关订单，快去预订吧</text>
+    <button class="go-search-btn" bindtap="goToSearch">
+      <text class="btn-text">去搜索酒店</text>
+    </button>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-state" wx:if="{{loading && hasValidUser}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="load-more" wx:if="{{hasMore && !loading && hasValidUser}}">
+    <text class="load-more-text">上拉加载更多</text>
+  </view>
+</view>
+
+<!-- 未登录提示 -->
+<view class="login-container" wx:if="{{!hasValidUser && !loading}}">
+  <view class="login-prompt">
+    <view class="login-icon">🔐</view>
+    <text class="login-title">请先登录</text>
+    <text class="login-subtitle">登录后即可查看您的订单信息</text>
+    <button class="go-login-btn" bindtap="goToLogin">
+      <text class="btn-text">去登录</text>
+    </button>
+  </view>
+</view>

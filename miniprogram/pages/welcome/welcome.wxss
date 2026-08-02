@@ -1,0 +1,245 @@
+/* pages/welcome/welcome.wxss */
+
+/* 温馨欢迎页面样式 */
+.welcome-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fff6f0 0%, #ffe8dc 50%, #ffd4c4 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 背景装饰圆圈 */
+.bg-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.1;
+}
+
+.circle-1 {
+  width: 300rpx;
+  height: 300rpx;
+  background: linear-gradient(45deg, #ff9a76, #ffc299);
+  top: -100rpx;
+  right: -100rpx;
+  animation: float 6s ease-in-out infinite;
+}
+
+.circle-2 {
+  width: 200rpx;
+  height: 200rpx;
+  background: linear-gradient(45deg, #ffb380, #ffd4a3);
+  bottom: -50rpx;
+  left: -50rpx;
+  animation: float 8s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20rpx) rotate(10deg); }
+}
+
+/* 居中的主要内容区域 */
+.center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+  width: 100%;
+  max-width: 600rpx;
+}
+
+/* 宠物图标区域 */
+.pet-icon-wrap {
+  margin-bottom: 60rpx;
+}
+
+.pet-icon {
+  position: relative;
+  width: 160rpx;
+  height: 160rpx;
+  background: linear-gradient(135deg, #ff9a76, #ffc299);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 20rpx 40rpx rgba(255, 154, 118, 0.3);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.icon-paw {
+  font-size: 60rpx;
+  animation: rotate 3s linear infinite;
+}
+
+.icon-heart {
+  position: absolute;
+  top: -10rpx;
+  right: -10rpx;
+  font-size: 30rpx;
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.1); }
+}
+
+/* 标题样式 */
+.title-wrap {
+  text-align: center;
+  margin-bottom: 60rpx;
+}
+
+.main-title {
+  font-size: 72rpx;
+  font-weight: bold;
+  background: linear-gradient(135deg, #ff7a45, #ff9a76);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 24rpx;
+  letter-spacing: 4rpx;
+}
+
+.sub-title {
+  font-size: 32rpx;
+  color: #8b6f5a;
+  margin-bottom: 16rpx;
+  line-height: 1.4;
+}
+
+.description {
+  font-size: 28rpx;
+  color: #a0806a;
+  opacity: 0.8;
+}
+
+/* 特色介绍 - 只保留两个特色项 */
+.features {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 40rpx 0;
+  gap: 80rpx;
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+}
+
+.feature-icon {
+  font-size: 40rpx;
+  margin-bottom: 12rpx;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.feature-text {
+  font-size: 24rpx;
+  color: #8b6f5a;
+  font-weight: 500;
+}
+
+.features .feature-item:nth-child(1) .feature-icon {
+  animation-delay: 0s;
+}
+
+.features .feature-item:nth-child(2) .feature-icon {
+  animation-delay: 0.2s;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10rpx); }
+}
+
+/* 加载区域样式 */
+.loading-wrap {
+  width: 100%;
+  max-width: 500rpx;
+  z-index: 1;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #8b6f5a;
+  margin-bottom: 24rpx;
+  text-align: center;
+  font-weight: 500;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 16rpx;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 8rpx;
+  overflow: hidden;
+  backdrop-filter: blur(10rpx);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff9a76, #ffb380);
+  border-radius: 8rpx;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 20rpx rgba(255, 154, 118, 0.5);
+}
+
+/* 进入按钮样式 */
+.enter-btn {
+  width: 80%;
+  height: 96rpx;
+  background: linear-gradient(135deg, #ff9a76, #ffb380);
+  color: #fff;
+  font-size: 36rpx;
+  font-weight: bold;
+  border-radius: 48rpx;
+  border: none;
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.5s ease;
+  box-shadow: 0 10rpx 30rpx rgba(255, 154, 118, 0.4);
+  z-index: 1;
+}
+
+.enter-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 5rpx 15rpx rgba(255, 154, 118, 0.4);
+}
+
+.enter-btn::after {
+  border: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}

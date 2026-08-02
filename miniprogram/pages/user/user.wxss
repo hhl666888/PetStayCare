@@ -1,0 +1,241 @@
+/* pages/user/user.wxss - 用户中心页面样式 */
+page {
+  height: 100vh;
+  background: linear-gradient(135deg, #fff6f0 0%, #ffe8dc 50%, #ffd4c4 100%);
+  overflow: hidden;
+}
+
+.user-container {
+  min-height: 100vh;
+  padding: 40rpx;
+  position: relative;
+  overflow-y: auto;
+}
+
+/* 背景装饰 */
+.bg-decoration {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.decoration-circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.08;
+}
+
+.circle-1 {
+  width: 350rpx;
+  height: 350rpx;
+  background: linear-gradient(45deg, #ff9a76, #ffc299);
+  top: -150rpx;
+  right: -100rpx;
+  animation: float 8s ease-in-out infinite;
+}
+
+.circle-2 {
+  width: 250rpx;
+  height: 250rpx;
+  background: linear-gradient(45deg, #ffb380, #ffd4a3);
+  bottom: 100rpx;
+  left: -80rpx;
+  animation: float 6s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20rpx) rotate(10deg); }
+}
+
+/* 主要内容 */
+.main-content {
+  position: relative;
+  z-index: 1;
+  padding-bottom: 40rpx;
+}
+
+/* 用户信息卡片 */
+.user-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 40rpx;
+  padding: 60rpx 40rpx;
+  margin-bottom: 40rpx;
+  box-shadow: 0 20rpx 60rpx rgba(255, 154, 118, 0.2);
+  backdrop-filter: blur(10rpx);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 用户头像区域 */
+.user-avatar-section {
+  position: relative;
+  margin-bottom: 30rpx;
+}
+
+.user-avatar {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  border: 6rpx solid rgba(255, 154, 118, 0.3);
+  box-shadow: 0 10rpx 30rpx rgba(255, 154, 118, 0.3);
+}
+
+.avatar-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(135deg, #52c41a, #73d13d);
+  border-radius: 20rpx;
+  padding: 8rpx 16rpx;
+  border: 3rpx solid white;
+  box-shadow: 0 4rpx 12rpx rgba(82, 196, 26, 0.3);
+}
+
+.badge-text {
+  color: white;
+  font-size: 20rpx;
+  font-weight: bold;
+}
+
+/* 用户信息区域 */
+.user-info-section {
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.user-name {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 12rpx;
+}
+
+.user-account {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+  opacity: 0.9;
+}
+
+.user-status {
+  display: block;
+  font-size: 28rpx;
+  color: #8b6f5a;
+  opacity: 0.8;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  width: 100%;
+  max-width: 400rpx;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 88rpx;
+  border-radius: 44rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.action-btn.primary {
+  background: linear-gradient(135deg, #ff9a76, #ffb380);
+  color: white;
+  box-shadow: 0 10rpx 30rpx rgba(255, 154, 118, 0.4);
+}
+
+.action-btn.secondary {
+  background: transparent;
+  color: #ff9a76;
+  border: 2rpx solid #ff9a76;
+}
+
+.action-btn:active {
+  transform: scale(0.98);
+}
+
+.btn-icon {
+  font-size: 36rpx;
+  margin-right: 12rpx;
+}
+
+.btn-text {
+  font-size: 32rpx;
+}
+
+/* 功能菜单 */
+.menu-section {
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+}
+
+.menu-group {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 30rpx;
+  overflow: hidden;
+  backdrop-filter: blur(10rpx);
+  box-shadow: 0 10rpx 30rpx rgba(255, 154, 118, 0.15);
+}
+
+.group-title {
+  display: block;
+  padding: 30rpx 40rpx 20rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  background: rgba(255, 154, 118, 0.05);
+  border-bottom: 1rpx solid rgba(255, 154, 118, 0.1);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx 40rpx;
+  border-bottom: 1rpx solid rgba(255, 154, 118, 0.08);
+  transition: background-color 0.3s ease;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:active {
+  background: rgba(255, 154, 118, 0.05);
+}
+
+.menu-left {
+  display: flex;
+  align-items: center;
+}
+
+.menu-icon {
+  font-size: 40rpx;
+  margin-right: 20rpx;
+}
+
+.menu-text {
+  font-size: 32rpx;
+  color: #333;
+}
+
+.menu-arrow {
+  font-size: 28rpx;
+  color: #ccc;
+  font-weight: bold;
+}

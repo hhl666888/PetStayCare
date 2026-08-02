@@ -1,0 +1,90 @@
+<!--index.wxml - 用户登录页面-->
+<view class="auth-container">
+  <!-- 背景装饰 -->
+  <view class="bg-decoration">
+    <view class="decoration-circle circle-1"></view>
+    <view class="decoration-circle circle-2"></view>
+    <view class="decoration-circle circle-3"></view>
+  </view>
+  
+  <!-- 主要内容 -->
+  <view class="main-content">
+    <!-- 标题 -->
+    <view class="header">
+      <text class="app-title">宠宿无忧</text>
+      <text class="app-subtitle">完善个人信息，开启美好旅程</text>
+    </view>
+    
+    <!-- 用户信息区域 -->
+    <view class="auth-section">
+      <!-- 未登录状态 -->
+      <block wx:if="{{!hasUserInfo}}">
+        <view class="input-section">
+          <view class="input-group">
+            <text class="input-label">
+							<text class="required">*</text>账号
+						</text>
+            <input 
+              type="text" 
+              class="account-input" 
+              placeholder="请输入账号" 
+              bind:input="onAccountChange"
+              maxlength="20"
+            />
+          </view>
+          
+          <view class="input-group">
+            <text class="input-label">
+              <text class="required">*</text>密码
+            </text>
+            <input
+              type="text"
+              class="password-input"
+              password="{{true}}"
+              placeholder="请输入密码"
+              bind:input="onPasswordChange"
+              maxlength="20"
+            />
+          </view>
+          
+          <view class="register-link">
+            <text class="register-text">未注册？</text>
+            <text class="register-btn" bindtap="goToRegister">点击注册</text>
+          </view>
+        </view>
+      </block>
+      
+      <!-- 已登录状态 -->
+      <block wx:else>
+        <view class="user-profile">
+          <view class="profile-info">
+            <text class="profile-name">{{userInfo.account}}</text>
+            <text class="profile-status">登录成功</text>
+          </view>
+        </view>
+      </block>
+    </view>
+    
+    <!-- 操作按钮 -->
+    <view class="action-section">
+      <button class="action-btn primary" bindtap="validateLogin">
+        <view class="btn-content">
+          <text class="btn-icon">🔐</text>
+          <text class="btn-text">登录</text>
+        </view>
+      </button>
+      
+      <!-- 已登录状态的快速跳转 -->
+      <button wx:if="{{hasUserInfo}}" class="quick-enter-btn" bindtap="bindViewTap">
+        <text class="quick-icon">⚡</text>
+        <text class="quick-text">快速进入</text>
+      </button>
+      
+      <!-- 加载提示 -->
+      <view wx:if="{{loading}}" class="loading-hint">
+        <text class="loading-icon">⏳</text>
+        <text class="loading-text">正在处理...</text>
+      </view>
+    </view>
+  </view>
+</view>

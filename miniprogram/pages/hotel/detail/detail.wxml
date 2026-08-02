@@ -1,0 +1,315 @@
+<!--pages/hotel/detail/detail.wxml-->
+<view class="hotel-detail-container">
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading-state">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">正在加载酒店信息...</text>
+  </view>
+
+  <!-- 酒店详情内容 -->
+  <view wx:elif="{{hotel}}" class="detail-content">
+    <!-- 图片轮播 -->
+    <view class="image-section">
+      <swiper 
+        class="image-swiper"
+        indicator-dots="{{hotel.images.length > 1}}"
+        autoplay="{{hotel.images.length > 1}}"
+        interval="4000"
+        duration="500"
+        indicator-color="rgba(255,255,255,0.5)"
+        indicator-active-color="#FF6B6B"
+        bindchange="onSwiperChange"
+      >
+        <block wx:for="{{hotel.images}}" wx:key="*this">
+          <swiper-item>
+            <image
+              src="{{item}}"
+              mode="aspectFill"
+              class="swiper-image"
+              bindtap="onImagePreview"
+              binderror="onImageError"
+              data-src="{{item}}"
+            />
+          </swiper-item>
+        </block>
+      </swiper>
+      
+      <!-- 图片指示器 -->
+      <view wx:if="{{hotel.images.length > 1}}" class="image-indicator">
+        <text>{{currentImageIndex + 1}}/{{hotel.images.length}}</text>
+      </view>
+    </view>
+
+    <!-- 酒店基本信息 -->
+    <view class="hotel-info-card">
+      <!-- 标题区域 -->
+      <view class="header-section">
+        <view class="title-wrapper">
+          <text class="hotel-name">{{hotel.name}}</text>
+          <view class="rating-wrapper">
+            <text class="rating-star">⭐</text>
+            <text class="rating-score">{{hotel.rating}}</text>
+          </view>
+        </view>
+        
+        <!-- 操作按钮 -->
+        <view class="action-buttons">
+          <view class="action-btn favorite-btn {{isFavorite ? 'favorited' : ''}}" bindtap="onFavorite">
+            <text class="action-icon">{{isFavorite ? '❤️' : '🤍'}}</text>
+            <text class="action-text">{{isFavorite ? '已收藏' : '收藏'}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 营业时间 -->
+      <view class="info-item">
+        <text class="info-icon">🕒</text>
+        <text class="info-label">营业时间：</text>
+        <text class="info-value">{{hotel.businessHours}}</text>
+      </view>
+
+      <!-- 地址 -->
+      <view class="info-item">
+        <text class="info-icon">📍</text>
+        <text class="info-label">酒店地址：</text>
+        <text class="info-value">{{hotel.address}}</text>
+      </view>
+
+      <!-- 联系电话 -->
+      <view class="info-item">
+        <text class="info-icon">📞</text>
+        <text class="info-label">联系电话：</text>
+        <text class="info-value">{{hotel.phone}}</text>
+      </view>
+    </view>
+
+    <!-- 酒店描述 -->
+    <view wx:if="{{hotel.jianjie}}" class="desc-card">
+      <view class="card-title">酒店介绍</view>
+      <text class="desc-text">{{hotel.jianjie}}</text>
+    </view>
+
+    <!-- 服务项目 - 美团风格商品列表 -->
+    <view wx:if="{{hotel.services.length > 0}}" class="services-section">
+      <view class="section-header">
+        <view class="section-title">🎯 热门服务</view>
+       
+      </view>
+      
+      <view class="meituan-services-grid">
+        <block wx:for="{{hotel.services}}" wx:key="id" wx:for-item="service">
+          <view class="meituan-service-card" bindtap="onViewServiceDetail" data-service-id="{{service.id}}">
+            <!-- 服务图片轮播区域 -->
+            <view class="service-image-section" catchtap>
+              <swiper
+                wx:if="{{service.images && service.images.length > 0}}"
+                class="service-image-swiper"
+                indicator-dots="{{service.images.length > 1}}"
+                autoplay="{{service.images.length > 1}}"
+                interval="3000"
+                duration="500"
+                indicator-color="rgba(255,255,255,0.5)"
+                indicator-active-color="#FF6B6B"
+                circular="true"
+              >
+                <block wx:for="{{service.images}}" wx:key="index" wx:for-item="serviceImg">
+                  <swiper-item>
+                    <image
+                      src="{{serviceImg}}"
+                      mode="aspectFill"
+                      class="service-swiper-image"
+                      lazy-load="true"
+                      catchtap="onViewServiceDetail"
+                      data-service-id="{{service.id}}"
+                      binderror="onServiceImageError"
+                      data-index="{{index}}"
+                    />
+                  </swiper-item>
+                </block>
+              </swiper>
+              <!-- 单张图片时的显示 -->
+              <image
+                wx:else
+                class="service-image"
+                src="{{service.image}}"
+                mode="aspectFill"
+                lazy-load="true"
+                binderror="onServiceImageError"
+                data-index="{{index}}"
+              />
+            </view>
+            
+            <!-- 服务信息区域 -->
+            <view class="service-content">
+              <view class="service-header-info">
+                <text class="service-name-meituan">{{service.service_name || service.name}}</text>
+              </view>
+              
+              <view class="service-desc-meituan">{{service.description || '专业宠物服务，质量保证'}}</view>
+              
+              <!-- 价格和抢购区域 -->
+              <view class="service-footer">
+                <view class="price-section-meituan">
+                  <view class="price-info">
+                    <text class="price-symbol">¥</text>
+                    <text class="price-number">{{service.price || 0}}</text>
+										<text class="price-unit">/次</text>
+                  </view>
+									
+                  
+                </view>
+                
+                <!-- 立即购买按钮 - 阻止冒泡 -->
+                <view class="buy-section" catchtap="onBuyService" data-service-id="{{service.id}}" data-service-name="{{service.service_name || service.name}}" data-price="{{service.price || 0}}">
+                  <view class="meituan-buy-btn">
+                    <text class="buy-text">立即抢购</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- 房型列表 -->
+    <view wx:if="{{rooms && rooms.length > 0}}" class="rooms-section">
+      <view class="section-header">
+        <text class="section-title">全部房型 ({{rooms.length}}种)</text>
+      </view>
+
+      <view class="rooms-list">
+        <block wx:for="{{rooms}}" wx:key="id">
+          <view class="room-card" data-id="{{item.id}}" data-name="{{item.name}}" bindtap="onViewRoomDetail" data-room-id="{{item.id}}">
+            <!-- 房型头部 -->
+            <view class="room-header">
+              <view class="room-title-section">
+                <text class="room-name">{{item.name}}</text>
+                <view wx:if="{{item.discount > 0}}" class="discount-badge">
+                  <text class="discount-text">{{item.discountDesc}}</text>
+                </view>
+              </view>
+            </view>
+
+            <!-- 房型图片轮播 -->
+            <view wx:if="{{item.images && item.images.length > 0}}" class="room-image-section" catchtap>
+              <swiper
+                class="room-image-swiper"
+                indicator-dots="{{item.images.length > 1}}"
+                autoplay="{{item.images.length > 1}}"
+                interval="3000"
+                duration="500"
+                indicator-color="rgba(255,255,255,0.5)"
+                indicator-active-color="#FF6B6B"
+                circular="true"
+              >
+                <block wx:for="{{item.images}}" wx:key="index" wx:for-item="roomImg">
+                  <swiper-item>
+                    <image
+                      src="{{roomImg}}"
+                      mode="aspectFill"
+                      class="room-swiper-image"
+                      catchtap="onRoomImagePreview"
+                      data-images="{{item.images}}"
+                      data-index="{{index}}"
+                      lazy-load="true"
+                    />
+                  </swiper-item>
+                </block>
+              </swiper>
+            </view>
+            <view wx:else class="no-images-placeholder">
+              <text class="placeholder-icon">📸</text>
+              <text class="placeholder-text">暂无房型图片</text>
+            </view>
+
+            <!-- 房型描述 -->
+            <view wx:if="{{item.description}}" class="room-description">
+              <text class="desc-content">{{item.description}}</text>
+            </view>
+
+            <!-- 房型规格 -->
+            <view class="room-specs">
+              <view wx:if="{{item.capacity}}" class="spec-item">
+                <text class="spec-label">🏠 容量：</text>
+                <text class="spec-value">{{item.capacity}}只宠物</text>
+              </view>
+              <view wx:if="{{item.size}}" class="spec-item">
+                <text class="spec-label">📏 面积：</text>
+                <text class="spec-value">{{item.size}}</text>
+              </view>
+              <view class="spec-item">
+                <text class="spec-label">📦 库存：</text>
+                <text class="spec-value stock-value {{item.kucun <= 0 ? 'stock-empty' : ''}}">{{item.kucun || 0}}间</text>
+              </view>
+            </view>
+
+            <!-- 房型设施 -->
+            <view wx:if="{{item.facilities && item.facilities.length > 0}}" class="room-facilities">
+              <view class="facilities-title">🌟 房型设施</view>
+              <view class="facilities-list">
+                <text
+                  wx:for="{{item.facilities.slice(0, 6)}}"
+                  wx:key="index"
+                  class="facility-tag"
+                >
+                  {{item}}
+                </text>
+                <text wx:if="{{item.facilities.length > 6}}" class="more-facilities">
+                  +{{item.facilities.length - 6}}项
+                </text>
+              </view>
+            </view>
+
+            <!-- 价格区域 -->
+            <view class="price-section">
+              <view class="price-info">
+                <view class="current-price">
+                  <text class="price-symbol">¥</text>
+                  <text class="price-number">{{item.price}}</text>
+                  <text class="price-unit">/晚</text>
+                </view>
+                
+              </view>
+
+              <!-- 操作按钮区域 -->
+              <view class="action-section">
+                <view class="action-left">
+                  <!-- 立即抢购按钮 -->
+                  <view wx:if="{{item.kucun <= 0}}" class="sold-out-btn">
+                    <text class="sold-out-text">已售罄</text>
+                  </view>
+                  <view wx:else class="buy-btn" bindtap="onBuyRoom" data-id="{{item.id}}" data-name="{{item.name}}">
+                    <text class="buy-text">立即抢购</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- 暂无房型提示 -->
+    <view wx:elif="{{hotel && rooms.length === 0}}" class="no-rooms">
+      <text class="no-rooms-icon">🏠</text>
+      <text class="no-rooms-title">暂无房型信息</text>
+      <text class="no-rooms-desc">该酒店暂时没有可预订的房型</text>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:else class="empty-state">
+    <text class="empty-icon">🏨</text>
+    <text class="empty-title">酒店信息不存在</text>
+    <text class="empty-desc">{{errorMessage || '请稍后重试或联系客服'}}</text>
+    <view wx:if="{{hotelId}}" class="debug-info">
+      <text class="debug-label">酒店ID:</text>
+      <text class="debug-value">{{hotelId}}</text>
+    </view>
+    <button class="retry-btn" bindtap="loadHotelDetail">重新加载</button>
+  </view>
+  
+
+</view>
+

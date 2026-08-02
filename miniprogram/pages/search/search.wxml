@@ -1,0 +1,98 @@
+<!--pages/search/search.wxml-->
+<view class="search-container">
+  <!-- 搜索框 -->
+  <view class="search-header">
+    <view class="search-box">
+      <input 
+        class="search-input" 
+        placeholder="搜索酒店、地区或特色服务" 
+        value="{{searchKeyword}}" 
+        bindinput="onSearchInput"
+        confirm-type="search"
+        bindconfirm="onSearchConfirm"
+      />
+      <button class="search-btn" bindtap="onSearch">搜索</button>
+    </view>
+  </view>
+
+  <!-- 搜索筛选 -->
+  <view class="filter-section">
+    <scroll-view class="filter-scroll" scroll-x="true">
+      <view class="filter-item {{activeFilter === 'all' ? 'active' : ''}}" bindtap="onFilterChange" data-filter="all">
+        全部
+      </view>
+      <view class="filter-item {{activeFilter === 'price' ? 'active' : ''}}" bindtap="onFilterChange" data-filter="price">
+        价格优先
+      </view>
+      <view class="filter-item {{activeFilter === 'rating' ? 'active' : ''}}" bindtap="onFilterChange" data-filter="rating">
+        评分优先
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 搜索历史 -->
+  <view class="search-history" wx:if="{{!hasSearched && searchHistory.length > 0}}">
+    <view class="history-header">
+      <text class="history-title">搜索历史</text>
+      <text class="clear-history" bindtap="clearHistory">清空</text>
+    </view>
+    <view class="history-list">
+      <view class="history-item" wx:for="{{searchHistory}}" wx:key="index" bindtap="onHistoryTap" data-keyword="{{item}}">
+        {{item}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view class="search-results" wx:if="{{hasSearched}}">
+    <view class="result-count" wx:if="{{searchResults.length > 0}}">
+      找到{{searchResults.length}}个结果
+    </view>
+    
+    <!-- 酒店列表 - 统一样式 -->
+    <view class="featured-hotels">
+      <block wx:for="{{searchResults}}" wx:key="id">
+        <view class="featured-card" data-id="{{item.id}}" bindtap="onHotelTap">
+            <view class="featured-image">
+              <image src="{{item.mainImage}}" mode="aspectFill" class="featured-img" />
+              <view class="featured-rating">
+                <text class="rating-star">⭐</text>
+                <text class="rating-text">{{item.rating}}</text>
+              </view>
+              <view wx:if="{{item.isRecommended || item.is_recommend}}" class="featured-badge">推荐</view>
+            </view>
+            <view class="featured-info">
+              <view class="featured-name">{{item.name}}</view>
+              <view class="featured-location">
+                <text class="location-icon">📍</text>
+                <text class="location-text">{{item.address}}</text>
+              </view>
+              <view class="featured-tags">
+                <block wx:for="{{item.serviceTags}}" wx:key="*this" wx:for-item="tag">
+                  <text class="tag">{{tag}}</text>
+                </block>
+              </view>
+
+            </view>
+          </view>
+      </block>
+    </view>
+
+    <!-- 无结果提示 -->
+    <view class="no-results" wx:if="{{searchResults.length === 0}}">
+      <image class="no-result-icon" src="/pages/images/no-result.png"></image>
+      <text class="no-result-text">未找到相关酒店</text>
+      <text class="no-result-tip">请尝试其他关键词</text>
+    </view>
+  </view>
+
+  <!-- 热门搜索 -->
+  <view class="hot-search" wx:if="{{!hasSearched}}">
+    <view class="hot-title">热门搜索</view>
+    <view class="hot-list">
+      <view class="hot-item" wx:for="{{hotKeywords}}" wx:key="index" bindtap="onHotTap" data-keyword="{{item}}">
+        {{item}}
+      </view>
+    </view>
+  </view>
+</view>

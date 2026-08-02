@@ -1,0 +1,9 @@
+{
+  "usingComponents": {},
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "backgroundColor": "#F8F9FA",
+  "navigationBarTitleText": "预订成功",
+  "navigationBarBackgroundColor": "#FF6B6B",
+  "navigationBarTextStyle": "white"
+}

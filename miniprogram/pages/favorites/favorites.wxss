@@ -1,0 +1,361 @@
+/* pages/favorites/favorites.wxss - 我的收藏页面样式 */
+.favorites-container {
+  background: linear-gradient(180deg, #F8F9FA 0%, #FFFFFF 100%);
+  min-height: 100vh;
+}
+
+/* 加载状态 */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 40rpx;
+  gap: 20rpx;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid #F0F2F5;
+  border-top: 4rpx solid #FF6B6B;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 26rpx;
+  color: #8E8E93;
+}
+
+/* 排序工具栏 */
+.sort-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  background: #fff;
+  margin: 20rpx 20rpx 0;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.sort-left, .sort-right {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.sort-label {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.sort-btn {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 12rpx 20rpx;
+  background: #F8F9FA;
+  border-radius: 20rpx;
+  border: 1rpx solid #E8EAED;
+  transition: all 0.2s ease;
+}
+
+.sort-btn:active {
+  background: #E8EAED;
+  transform: scale(0.95);
+}
+
+.sort-btn.danger {
+  background: #FFF2F0;
+  border-color: #FFD8D1;
+}
+
+.sort-btn.danger:active {
+  background: #FFD8D1;
+}
+
+.sort-text {
+  font-size: 22rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.sort-btn.danger .sort-text {
+  color: #FF6B6B;
+}
+
+.sort-arrow {
+  font-size: 18rpx;
+  color: #FF6B6B;
+  font-weight: 600;
+}
+
+/* 收藏列表 */
+.content-wrapper {
+  padding-bottom: 40rpx;
+}
+
+.favorites-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+  padding: 20rpx;
+}
+
+.favorite-card {
+  background: #fff;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.favorite-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.12);
+}
+
+/* 图片区域 */
+.card-image {
+  position: relative;
+  height: 300rpx;
+  overflow: hidden;
+}
+
+.hotel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 60%, rgba(0,0,0,0.3));
+  pointer-events: none;
+}
+
+.rating-badge {
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10rpx);
+  color: #fff;
+  padding: 10rpx 16rpx;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.rating-star {
+  font-size: 18rpx;
+}
+
+.rating-text {
+  font-size: 20rpx;
+  font-weight: 600;
+}
+
+/* 内容区域 */
+.card-content {
+  padding: 24rpx;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16rpx;
+}
+
+.hotel-info {
+  flex: 1;
+  margin-right: 16rpx;
+}
+
+.hotel-name {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1C1C1E;
+  line-height: 1.3;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.hotel-tags {
+  display: flex;
+  gap: 8rpx;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background: #FFF2F0;
+  color: #FF6B6B;
+  font-size: 20rpx;
+  padding: 6rpx 12rpx;
+  border-radius: 16rpx;
+  font-weight: 500;
+}
+
+.action-area {
+  display: flex;
+  align-items: center;
+}
+
+.remove-btn {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFF2F0;
+  border-radius: 30rpx;
+  transition: all 0.2s ease;
+}
+
+.remove-btn:active {
+  background: #FFD8D1;
+  transform: scale(0.9);
+}
+
+.remove-icon {
+  font-size: 24rpx;
+}
+
+/* 地址区域 */
+.address-section {
+  margin-bottom: 20rpx;
+}
+
+.address-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 12rpx 16rpx;
+  background: #F8F9FA;
+  border-radius: 16rpx;
+  transition: all 0.2s ease;
+}
+
+.address-wrapper:active {
+  background: #E8EAED;
+}
+
+.address-icon {
+  font-size: 22rpx;
+  color: #8E8E93;
+}
+
+.address-text {
+  flex: 1;
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.distance-text {
+  font-size: 20rpx;
+  color: #FF6B6B;
+  font-weight: 600;
+  background: #FFF2F0;
+  padding: 4rpx 10rpx;
+  border-radius: 12rpx;
+}
+
+/* 元信息 */
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  flex: 1;
+  min-width: 0;
+}
+
+.meta-icon {
+  font-size: 18rpx;
+  color: #8E8E93;
+}
+
+.meta-text {
+  font-size: 20rpx;
+  color: #666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 40rpx;
+}
+
+.empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20rpx;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  opacity: 0.3;
+}
+
+.empty-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: #999;
+  line-height: 1.5;
+}
+
+.explore-btn {
+  margin-top: 20rpx;
+  background: #FF6B6B;
+  color: #fff;
+  border: none;
+  border-radius: 25rpx;
+  padding: 16rpx 40rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+}
+
+.explore-btn:active {
+  background: #FF5252;
+  transform: scale(0.95);
+}
+
+.btn-text {
+  color: #fff;
+}

@@ -1,0 +1,226 @@
+<!--pages/hotel/room_detail/room_detail.wxml-->
+<view class="room-detail">
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="loading"></view>
+    <text>加载中...</text>
+  </view>
+
+  <!-- 房型详情内容 -->
+  <view wx:else class="detail-content">
+    <!-- 图片轮播 -->
+    <view class="image-section">
+      <swiper 
+        class="room-swiper" 
+        indicator-dots="{{true}}" 
+        autoplay="{{true}}" 
+        interval="3000" 
+        duration="500"
+        bindchange="onSwiperChange"
+      >
+        <swiper-item wx:for="{{room.images}}" wx:key="index">
+          <image 
+            class="room-image" 
+            src="{{item}}" 
+            mode="aspectFill"
+            bindtap="onImagePreview"
+            data-index="{{index}}"
+          />
+        </swiper-item>
+      </swiper>
+      <view class="image-indicator">{{currentImageIndex + 1}}/{{room.images.length}}</view>
+    </view>
+
+    <!-- 房型基本信息 -->
+    <view class="basic-info">
+      <view class="room-header">
+        <view class="room-name">{{room.name}}</view>
+        <view class="room-tags">
+          <text class="tag capacity-tag">可容纳{{room.capacity}}只宠物</text>
+          <text class="tag size-tag">{{room.size}}</text>
+        </view>
+      </view>
+      
+      <view class="price-section">
+        <view class="price-info">
+          <text class="current-price">¥{{room.price}}</text>
+          <text class="original-price" wx:if="{{room.originalPrice > room.price}}">¥{{room.originalPrice}}</text>
+          <text class="discount-tag" wx:if="{{room.discount > 0}}">{{room.discountDesc}}</text>
+        </view>
+        <view class="sales-info">
+          <text class="sales-count">已售{{room.salesCount}}</text>
+          <text class="stock-info">库存{{room.stock}}</text>
+        </view>
+      </view>
+
+      <view class="room-description">
+        <text>{{room.description}}</text>
+      </view>
+    </view>
+
+    <!-- 房型特色 -->
+    <view class="section">
+      <view class="section-title">
+        <text class="title-icon">✨</text>
+        <text>房型特色</text>
+      </view>
+      <view class="features-list">
+        <view class="feature-item" wx:for="{{room.features}}" wx:key="index">
+          <text class="feature-icon">✓</text>
+          <text>{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 设施服务 -->
+    <view class="section">
+      <view class="section-title">
+        <text class="title-icon">🏠</text>
+        <text>设施服务</text>
+      </view>
+      <view class="facilities-container">
+        <view class="facility-item" wx:for="{{room.facilities}}" wx:key="index">
+          <text class="facility-icon">🛋️</text>
+          <text class="facility-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 额外服务 -->
+    <view class="section" wx:if="{{room.services.length > 0}}">
+      <view class="section-title">
+        <text class="title-icon">🎁</text>
+        <text>额外服务</text>
+      </view>
+      <view class="services-list">
+        <view class="service-item" wx:for="{{room.services}}" wx:key="index">
+          <text class="service-icon">💝</text>
+          <text>{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 入住须知 -->
+    <view class="section">
+      <view class="section-title">
+        <text class="title-icon">📋</text>
+        <text>入住须知</text>
+      </view>
+      <view class="rules-list">
+        <view class="rule-item" wx:for="{{room.rules}}" wx:key="index">
+          <text class="rule-number">{{index + 1}}</text>
+          <text>{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 取消政策 -->
+    <view class="section">
+      <view class="section-title">
+        <text class="title-icon">🔄</text>
+        <text>取消政策</text>
+      </view>
+      <view class="cancel-policy">
+        <text>{{room.cancelPolicy}}</text>
+      </view>
+    </view>
+
+    <!-- 酒店信息 -->
+    <view class="section hotel-info">
+      <view class="section-title">
+        <text class="title-icon">🏨</text>
+        <text>酒店信息</text>
+      </view>
+      <view class="hotel-details">
+        <view class="hotel-item">
+          <text class="hotel-label">酒店名称：</text>
+          <text class="hotel-value">{{hotel.name}}</text>
+        </view>
+        <view class="hotel-item">
+          <text class="hotel-label">酒店地址：</text>
+          <text class="hotel-value">{{hotel.address}}</text>
+        </view>
+        <view class="hotel-item">
+          <text class="hotel-label">联系电话：</text>
+          <text class="hotel-value">{{hotel.phone}}</text>
+        </view>
+        <view class="hotel-item">
+          <text class="hotel-label">酒店评分：</text>
+          <text class="hotel-value">{{hotel.rating}}分</text>
+        </view>
+      </view>
+      
+      <view class="hotel-actions">
+        <button class="action-btn contact-btn" bindtap="onContactHotel">
+          <text class="btn-icon">📞</text>
+          <text>联系酒店</text>
+        </button>
+        <button class="action-btn location-btn" bindtap="onViewLocation">
+          <text class="btn-icon">📍</text>
+          <text>查看位置</text>
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部预订栏 -->
+  <view class="bottom-bar">
+    <view class="price-summary">
+      <text class="total-price">¥{{room.price}}</text>
+      <text class="price-unit">/晚</text>
+    </view>
+    <button class="booking-btn {{room.stock <= 0 ? 'disabled' : ''}}" 
+            bindtap="onDirectBooking" 
+            disabled="{{room.stock <= 0}}">
+      {{room.stock <= 0 ? '已售罄' : '立即预订'}}
+    </button>
+  </view>
+</view>
+
+<!-- 预订弹窗 -->
+<view wx:if="{{showBookingModal}}" class="booking-modal">
+  <view class="modal-mask" bindtap="hideBookingModal"></view>
+  <view class="modal-content">
+    <view class="modal-header">
+      <text class="modal-title">预订房型</text>
+      <text class="modal-close" bindtap="hideBookingModal">×</text>
+    </view>
+    
+    <view class="booking-info">
+      <view class="booking-room">{{room.name}}</view>
+      <view class="booking-price">¥{{room.price}}/晚</view>
+    </view>
+
+    <view class="form-section">
+      <view class="form-label">入住日期</view>
+      <picker mode="date" bindchange="onCheckInDateChange">
+        <view class="picker-input">
+          {{selectedDates.checkIn || '请选择入住日期'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-section">
+      <view class="form-label">退房日期</view>
+      <picker mode="date" bindchange="onCheckOutDateChange">
+        <view class="picker-input">
+          {{selectedDates.checkOut || '请选择退房日期'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-section">
+      <view class="form-label">预订数量</view>
+      <view class="quantity-selector">
+        <button class="quantity-btn minus" bindtap="decreaseQuantity">-</button>
+        <text class="quantity-value">{{bookingQuantity}}</text>
+        <button class="quantity-btn plus" bindtap="increaseQuantity">+</button>
+      </view>
+    </view>
+
+    <view class="modal-footer">
+      <button class="cancel-btn" bindtap="hideBookingModal">取消</button>
+      <button class="confirm-btn" bindtap="confirmBooking">确认预订</button>
+    </view>
+  </view>
+</view>

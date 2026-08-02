@@ -1,0 +1,138 @@
+<!--pages/service/detail/detail.wxml - 服务详情页面-->
+<view class="service-detail-container">
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 服务详情内容 -->
+  <view wx:else class="content-wrapper">
+    <!-- 图片轮播 -->
+    <view class="swiper-section">
+      <swiper 
+        class="service-swiper"
+        indicator-dots="{{true}}"
+        indicator-color="rgba(255, 255, 255, 0.5)"
+        indicator-active-color="#ff9800"
+        autoplay="{{true}}"
+        interval="3000"
+        duration="500"
+      >
+        <block wx:if="{{serviceImgList.length > 0}}">
+          <swiper-item wx:for="{{serviceImgList}}" wx:key="index">
+            <image 
+              class="swiper-image"
+              src="{{item}}" 
+              mode="aspectFill"
+              bindtap="onPreviewImage"
+              data-index="{{index}}"
+            />
+          </swiper-item>
+        </block>
+        <swiper-item wx:else>
+          <view class="default-image">
+            <text>暂无图片</text>
+          </view>
+        </swiper-item>
+      </swiper>
+      
+      <!-- 图片指示器 -->
+      <view class="image-indicator" wx:if="{{serviceImgList.length > 1}}">
+        <text class="indicator-text">{{serviceImgList.length}} 张图片</text>
+      </view>
+    </view>
+
+    <!-- 服务基本信息 -->
+    <view class="info-section">
+      <!-- 服务名称和价格 -->
+      <view class="service-header">
+        <view class="name-section">
+          <text class="service-name">{{service.service_name || service.name || '服务项目'}}</text>
+        </view>
+        
+        <view class="price-section">
+          <text class="price-symbol">¥</text>
+          <text class="price-value">{{service.price}}</text>
+          <text class="price-unit">/{{service.unit || '次'}}</text>
+        </view>
+      </view>
+
+      <!-- 服务类型标签 -->
+      <view class="tag-row" wx:if="{{service.service_type}}">
+        <text class="type-tag type-tag-orange">{{service.service_type}}</text>
+      </view>
+
+      <!-- 服务描述 -->
+      <view class="description-box" wx:if="{{service.service_desc}}">
+        <text class="section-title">
+          <text class="title-icon">📋</text>
+          服务介绍
+        </text>
+        <text class="description-text">{{service.service_desc}}</text>
+      </view>
+
+      <!-- 包含项目 -->
+      <view class="included-box" wx:if="{{service.included_items}}">
+        <text class="section-title">
+          <text class="title-icon">✅</text>
+          包含项目
+        </text>
+        <view class="included-list">
+          <block wx:for="{{service.included_items}}" wx:key="index">
+            <view class="included-item">
+              <text class="included-check">✓</text>
+              <text class="included-text">{{item}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+
+      <!-- 预订规则 -->
+      <view class="rules-box" wx:if="{{service.booking_rules}}">
+        <text class="section-title">
+          <text class="title-icon">📅</text>
+          预订规则
+        </text>
+        <view class="rules-list">
+          <block wx:for="{{service.booking_rules}}" wx:key="index">
+            <view class="rule-item">
+              <text class="rule-num">{{index + 1}}</text>
+              <text class="rule-text">{{item}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+
+      <!-- 安全须知 -->
+      <view class="safety-box" wx:if="{{service.safety_notice}}">
+        <text class="section-title safety-title">
+          <text class="title-icon">⚠️</text>
+          安全须知
+        </text>
+        <view class="safety-content">
+          <text class="safety-text">{{service.safety_notice}}</text>
+        </view>
+      </view>
+
+      <!-- 人员要求 -->
+      <view class="staff-box" wx:if="{{service.staff_requirement}}">
+        <text class="section-title">
+          <text class="title-icon">👤</text>
+          人员要求
+        </text>
+        <view class="staff-tags">
+          <block wx:for="{{service.staff_requirement}}" wx:key="index">
+            <text class="staff-tag">{{item}}</text>
+          </block>
+        </view>
+      </view>
+
+
+    </view>
+
+    <!-- 底部操作栏 -->
+    <view class="bottom-bar">
+      <button class="book-btn" bindtap="onBookNow">立即预订</button>
+    </view>
+  </view>
+</view>
